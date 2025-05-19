@@ -74,7 +74,7 @@ class _SignupViewState extends State<SignupView> {
                       ),
                       validator: (value) {
                         if (value == null || value.isEmpty)
-                          return 'First name is required';
+                          {return 'First name is required';}
                         return null;
                       },
                     ),
@@ -91,7 +91,7 @@ class _SignupViewState extends State<SignupView> {
                       ),
                       validator: (value) {
                         if (value == null || value.isEmpty)
-                          return 'Last name is required';
+                          {return 'Last name is required';}
                         return null;
                       },
                     ),
@@ -112,7 +112,7 @@ class _SignupViewState extends State<SignupView> {
                 ),
                 validator: (value) {
                   if (value == null || value.isEmpty)
-                    return 'Email is required';
+                    {return 'Email is required';}
                   if (!value.contains('@')) return 'Enter a valid email';
                   return null;
                 },
@@ -131,7 +131,7 @@ class _SignupViewState extends State<SignupView> {
                 ),
                 validator: (value) {
                   if (value == null || value.isEmpty)
-                    return 'Phone number is required';
+                    {return 'Phone number is required';}
                   return null;
                 },
               ),
@@ -161,9 +161,9 @@ class _SignupViewState extends State<SignupView> {
                 ),
                 validator: (value) {
                   if (value == null || value.isEmpty)
-                    return 'Password is required';
+                    {return 'Password is required';}
                   if (value.length < 6)
-                    return 'Password must be at least 6 characters';
+                    {return 'Password must be at least 6 characters';}
                   return null;
                 },
               ),
