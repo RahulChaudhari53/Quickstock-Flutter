@@ -24,7 +24,7 @@ class _SignupViewState extends State<SignupView> {
 
   void handleNavigate() {
     if (formKey.currentState!.validate() && _agreedToTerms) {
-      Navigator.push(
+      Navigator.pushReplacement(
         context,
         MaterialPageRoute(builder: (context) => const DashboardView()),
       );

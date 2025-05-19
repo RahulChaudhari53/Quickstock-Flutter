@@ -2,6 +2,8 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:animate_do/animate_do.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:quickstock/view/dashboard_view.dart';
+import 'package:quickstock/view/forgot_password_view.dart';
 import 'package:quickstock/view/signup_page.dart';
 
 class LoginPage extends StatefulWidget {
@@ -40,7 +42,7 @@ class _LoginPageState extends State<LoginPage> {
 
   void handleLogin() {
     if (formKey.currentState!.validate()) {
-      Navigator.of(context).pushReplacementNamed("/");
+      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => DashboardView()));
     }
   }
 
@@ -179,7 +181,9 @@ class _LoginPageState extends State<LoginPage> {
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
                       TextButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          Navigator.push(context, MaterialPageRoute(builder: (context) => ForgotPasswordView()));
+                        },
                         child: Text(
                           "Forgot Password?",
                           style: TextStyle(color: Colors.grey[700], fontSize: 14),
