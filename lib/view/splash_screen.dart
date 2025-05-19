@@ -18,7 +18,7 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 
   Future<void> _initializeApp() async {
-    await Future.delayed(const Duration(seconds: 5));
+    await Future.delayed(const Duration(seconds: 2));
     _navigateToHomeScreen();
   }
 
@@ -40,7 +40,7 @@ class _SplashScreenState extends State<SplashScreen> {
             Image.asset('assets/quickstock_logo.png', width: 150, height: 150),
             const SizedBox(height: 20),
             Text(
-              AppConfig.appName ?? 'Quickstock',
+              AppConfig.appName,
               style: const TextStyle(
                 fontSize: 24,
                 fontWeight: FontWeight.bold,
