@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:quickstock/view/dashboard_view.dart';
 import 'package:quickstock/view/login_page.dart';
 
 class SignupView extends StatefulWidget {
@@ -24,7 +26,7 @@ class _SignupViewState extends State<SignupView> {
     if (formKey.currentState!.validate() && _agreedToTerms) {
       Navigator.push(
         context,
-        MaterialPageRoute(builder: (context) => const LoginPage()),
+        MaterialPageRoute(builder: (context) => const DashboardView()),
       );
     } else if (!_agreedToTerms) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -240,7 +242,7 @@ class _SignupViewState extends State<SignupView> {
                     width: 120,
                     child: ElevatedButton.icon(
                       onPressed: () {},
-                      icon: const Icon(Icons.g_mobiledata, size: 24),
+                      icon: const FaIcon(FontAwesomeIcons.google, size: 18,),
                       label: const Text('Google'),
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.white,
