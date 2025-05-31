@@ -25,6 +25,8 @@ class _LoginPageState extends State<LoginPage> {
     "assets/images/11244147.png",
   ];
 
+  Timer? _timer; // Timer reference
+
   @override
   void initState() {
     super.initState();
@@ -33,16 +35,27 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   void startTimer() {
-    Timer.periodic(Duration(seconds: 5), (timer) {
-      setState(() {
-        activeIndex = (activeIndex + 1) % _images.length;
-      });
+    _timer = Timer.periodic(Duration(seconds: 5), (timer) {
+      if (mounted) {
+        setState(() {
+          activeIndex = (activeIndex + 1) % _images.length;
+        });
+      }
     });
+  }
+
+  @override
+  void dispose() {
+    _timer?.cancel();
+    super.dispose();
   }
 
   void handleLogin() {
     if (formKey.currentState!.validate()) {
-      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => DashboardView()));
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => DashboardView()),
+      );
     }
   }
 
@@ -69,7 +82,12 @@ class _LoginPageState extends State<LoginPage> {
                               child: AnimatedOpacity(
                                 opacity: activeIndex == idx ? 1.0 : 0.0,
                                 duration: Duration(seconds: 1),
-                                child: Image.asset(img, fit: BoxFit.contain, width: 250, height: 250,),
+                                child: Image.asset(
+                                  img,
+                                  fit: BoxFit.contain,
+                                  width: 250,
+                                  height: 250,
+                                ),
                               ),
                             );
                           }).toList(),
@@ -79,8 +97,13 @@ class _LoginPageState extends State<LoginPage> {
                 SizedBox(height: 40),
                 FadeInUp(
                   delay: Duration(milliseconds: 1000),
-                  duration: Duration(milliseconds: 1500),                  
-                  child: Text("Welcome back you've been missed!", textAlign: TextAlign.center, style: TextStyle(color: Colors.grey[700], fontSize: 16),)),
+                  duration: Duration(milliseconds: 1500),
+                  child: Text(
+                    "Welcome back you've been missed!",
+                    textAlign: TextAlign.center,
+                    style: TextStyle(color: Colors.grey[700], fontSize: 16),
+                  ),
+                ),
                 SizedBox(height: 40),
                 FadeInUp(
                   delay: Duration(milliseconds: 1000),
@@ -120,7 +143,7 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                     validator: (value) {
                       if (value == null || value.isEmpty)
-                        {return 'Email is required';}
+                        return 'Email is required';
                       if (!value.contains('@')) return 'Enter a valid email';
                       return null;
                     },
@@ -166,9 +189,9 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                     validator: (value) {
                       if (value == null || value.isEmpty)
-                        {return 'Password is required';}
+                        return 'Password is required';
                       if (value.length < 6)
-                        {return 'Password must be at least 6 characters';}
+                        return 'Password must be at least 6 characters';
                       return null;
                     },
                   ),
@@ -182,11 +205,19 @@ class _LoginPageState extends State<LoginPage> {
                     children: [
                       TextButton(
                         onPressed: () {
-                          Navigator.push(context, MaterialPageRoute(builder: (context) => ForgotPasswordView()));
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => ForgotPasswordView(),
+                            ),
+                          );
                         },
                         child: Text(
                           "Forgot Password?",
-                          style: TextStyle(color: Colors.grey[700], fontSize: 14),
+                          style: TextStyle(
+                            color: Colors.grey[700],
+                            fontSize: 14,
+                          ),
                         ),
                       ),
                     ],
@@ -263,13 +294,16 @@ class _LoginPageState extends State<LoginPage> {
                             ),
                           ),
                           onPressed: () {},
-                          child: FaIcon(FontAwesomeIcons.apple, size: 25,color: Colors.black87,),
+                          child: FaIcon(
+                            FontAwesomeIcons.apple,
+                            size: 25,
+                            color: Colors.black87,
+                          ),
                         ),
                       ),
                     ],
                   ),
                 ),
-      
                 SizedBox(height: 20),
                 FadeInUp(
                   delay: Duration(milliseconds: 1000),
@@ -286,7 +320,12 @@ class _LoginPageState extends State<LoginPage> {
                       ),
                       TextButton(
                         onPressed: () {
-                          Navigator.push(context, MaterialPageRoute(builder: (context) => SignupView()));
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => SignupView(),
+                            ),
+                          );
                         },
                         child: Text(
                           "Register Now",
