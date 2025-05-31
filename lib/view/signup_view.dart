@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:quickstock/view/dashboard_view.dart';
-import 'package:quickstock/view/login_page.dart';
+import 'package:quickstock/view/login_view.dart';
 
 class SignupView extends StatefulWidget {
   const SignupView({super.key});

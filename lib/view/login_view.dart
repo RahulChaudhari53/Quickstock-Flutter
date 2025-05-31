@@ -4,7 +4,7 @@ import 'package:animate_do/animate_do.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:quickstock/view/dashboard_view.dart';
 import 'package:quickstock/view/forgot_password_view.dart';
-import 'package:quickstock/view/signup_page.dart';
+import 'package:quickstock/view/signup_view.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});

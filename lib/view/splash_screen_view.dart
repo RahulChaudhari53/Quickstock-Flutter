@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'dart:async';
-import 'package:quickstock/view/login_page.dart';
+import 'package:quickstock/view/login_view.dart';
 import 'package:quickstock/app_config.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -54,16 +54,3 @@ class _SplashScreenState extends State<SplashScreen> {
     );
   }
 }
-
-// Text(
-//   AppConfig.appName,
-//   style: const TextStyle(
-//     fontSize: 24,
-//     fontWeight: FontWeight.bold,
-//     color: Colors.black, // ← change this
-//   ),
-// ),
-
-// const CircularProgressIndicator(
-//   valueColor: AlwaysStoppedAnimation<Color>(Colors.black), // ← and this
-// ),
