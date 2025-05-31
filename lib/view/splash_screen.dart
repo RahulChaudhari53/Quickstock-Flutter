@@ -48,12 +48,22 @@ class _SplashScreenState extends State<SplashScreen> {
               ),
             ),
             const SizedBox(height: 10),
-            const CircularProgressIndicator(
-              valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
-            ),
           ],
         ),
       ),
     );
   }
 }
+
+// Text(
+//   AppConfig.appName,
+//   style: const TextStyle(
+//     fontSize: 24,
+//     fontWeight: FontWeight.bold,
+//     color: Colors.black, // ← change this
+//   ),
+// ),
+
+// const CircularProgressIndicator(
+//   valueColor: AlwaysStoppedAnimation<Color>(Colors.black), // ← and this
+// ),
