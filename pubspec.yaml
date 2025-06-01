@@ -36,6 +36,7 @@ dependencies:
   cupertino_icons: ^1.0.8
   animate_do: ^4.2.0
   font_awesome_flutter: ^10.8.0
+  flutter_svg: ^2.1.0
 
 dev_dependencies:
   flutter_test:
@@ -62,7 +63,7 @@ flutter:
   assets:
     - assets/images/
     - assets/logo/
-    - assets/quickstock_logo.png
+    - assets/icons/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images
@@ -76,10 +77,10 @@ flutter:
   # list giving the asset and other descriptors for the font. For
   # example:
   fonts:
-    - family: Roboto_Condensed-Black
+    - family: Roboto-Condensed-Black
       fonts:
         - asset: assets/fonts/roboto/Roboto_Condensed-Black.ttf
-    - family: Roboto_Condensed-ExtraBold
+    - family: Roboto-Condensed-ExtraBold
       fonts:
         - asset: assets/fonts/roboto/Roboto_Condensed-ExtraBold.ttf
     - family: Roboto_SemiCondensed-Black
@@ -88,15 +89,9 @@ flutter:
     - family: Roboto-Black
       fonts:
         - asset: assets/fonts/roboto/Roboto-Black.ttf
-    - family: Roboto-Black
-      fonts:
-        - asset: assets/fonts/roboto/Roboto-Black.ttf
     - family: Roboto-Italic
       fonts:
         - asset: assets/fonts/roboto/Roboto-Italic.ttf
-    - family: Roboto_Condensed-Black
-      fonts:
-        - asset: assets/fonts/roboto/Roboto_Condensed-Black.ttf
     - family: Roboto-Light
       fonts:
         - asset: assets/fonts/roboto/Roboto-Light.ttf
