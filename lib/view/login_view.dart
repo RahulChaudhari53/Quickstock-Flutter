@@ -20,6 +20,7 @@ class _LoginViewState extends State<LoginView> {
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
 
+  bool obscurePassword = true;
   bool rememberMe = false;
 
   void handleLogin() {
@@ -93,7 +94,17 @@ class _LoginViewState extends State<LoginView> {
                   hintText: "Enter your password",
                   prefixIcon: Icons.lock_outline,
                   keyboardType: TextInputType.text,
-                  obscureText: true,
+                  obscureText: obscurePassword,
+                  suffixIcon: IconButton(
+                    icon: Icon(
+                      obscurePassword ? Icons.visibility_off : Icons.visibility,
+                    ),
+                    onPressed: () {
+                      setState(() {
+                        obscurePassword = !obscurePassword;
+                      });
+                    },
+                  ),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
                       return 'Password is required';

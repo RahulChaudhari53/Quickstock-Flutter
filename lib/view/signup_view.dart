@@ -21,16 +21,16 @@ class _SignupViewState extends State<SignupView> {
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
 
-  bool _obscurePassword = true;
-  bool _agreedToTerms = false;
+  bool obscurePassword = true;
+  bool agreedToTerms = false;
 
   void handleNavigate() {
-    if (formKey.currentState!.validate() && _agreedToTerms) {
+    if (formKey.currentState!.validate() && agreedToTerms) {
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(builder: (context) => const DashboardView()),
       );
-    } else if (!_agreedToTerms) {
+    } else if (!agreedToTerms) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: Text('You must agree to the privacy policy and terms.'),
@@ -139,15 +139,15 @@ class _SignupViewState extends State<SignupView> {
                 label: 'Password',
                 hintText: 'Enter password',
                 prefixIcon: Icons.lock,
-                obscureText: _obscurePassword,
+                obscureText: obscurePassword,
                 keyboardType: TextInputType.visiblePassword,
                 suffixIcon: IconButton(
                   icon: Icon(
-                    _obscurePassword ? Icons.visibility_off : Icons.visibility,
+                    obscurePassword ? Icons.visibility_off : Icons.visibility,
                   ),
                   onPressed: () {
                     setState(() {
-                      _obscurePassword = !_obscurePassword;
+                      obscurePassword = !obscurePassword;
                     });
                   },
                 ),
@@ -167,10 +167,10 @@ class _SignupViewState extends State<SignupView> {
               Row(
                 children: [
                   Checkbox(
-                    value: _agreedToTerms,
+                    value: agreedToTerms,
                     onChanged: (bool? newValue) {
                       setState(() {
-                        _agreedToTerms = newValue ?? false;
+                        agreedToTerms = newValue ?? false;
                       });
                     },
                   ),
