@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:quickstock/common/custom_elevated_button.dart';
+import 'package:quickstock/common/custom_text_form_field.dart';
 
 class ForgotPasswordView extends StatefulWidget {
   const ForgotPasswordView({super.key});
@@ -24,8 +26,7 @@ class _ForgotPasswordViewState extends State<ForgotPasswordView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-      ),
+      appBar: AppBar(),
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(16),
@@ -42,20 +43,17 @@ class _ForgotPasswordViewState extends State<ForgotPasswordView> {
                 const SizedBox(height: 12),
                 const Text(
                   'Enter your email address below and we will send you a link to reset your password.',
-                  style: TextStyle(fontSize: 16),
                 ),
                 const SizedBox(height: 24),
-                TextFormField(
+                CustomTextFormField(
                   controller: emailController,
+                  label: "Email",
+                  hintText: "Enter your email",
+                  prefixIcon: Icons.email_outlined,
                   keyboardType: TextInputType.emailAddress,
-                  decoration: const InputDecoration(
-                    labelText: 'Email Address',
-                    border: OutlineInputBorder(),
-                    prefixIcon: Icon(Icons.email),
-                  ),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      return 'Please enter your email';
+                      return 'Email is required';
                     }
                     if (!value.contains('@')) {
                       return 'Enter a valid email';
@@ -66,15 +64,11 @@ class _ForgotPasswordViewState extends State<ForgotPasswordView> {
                 const SizedBox(height: 24),
                 SizedBox(
                   width: double.infinity,
-                  child: ElevatedButton(
+                  child: CustomElevatedButton(
                     onPressed: handleSendResetEmail,
-                    child: const Padding(
-                      padding: EdgeInsets.symmetric(vertical: 14),
-                      child: Text(
-                        'Send Password Reset Email',
-                        style: TextStyle(fontSize: 18),
-                      ),
-                    ),
+                    width: double.infinity,
+                    height: 55,
+                    child: const Text("Send Password Reset Email"),
                   ),
                 ),
               ],
