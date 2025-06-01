@@ -50,9 +50,10 @@ class _LoginViewState extends State<LoginView> {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     Image.asset(
-                      'assets/logo/logo.png',
-                      width: 130,
-                      height: 130,
+                      'assets/logo/quickstock_logo.png',
+
+                      width: 150,
+                      height: 150,
                     ),
                     const SizedBox(height: 32),
                     Text(

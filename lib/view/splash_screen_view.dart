@@ -25,7 +25,7 @@ class _SplashScreenState extends State<SplashScreen> {
   void _navigateToHomeScreen() {
     Navigator.pushReplacement(
       context,
-      MaterialPageRoute(builder: (context) => const LoginPage()),
+      MaterialPageRoute(builder: (context) => const LoginView()),
     );
   }
 
@@ -37,7 +37,11 @@ class _SplashScreenState extends State<SplashScreen> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            Image.asset('assets/quickstock_logo.png', width: 150, height: 150),
+            Image.asset(
+              'assets/logo/quickstock_logo.png',
+              width: 150,
+              height: 150,
+            ),
             const SizedBox(height: 20),
             Text(
               AppConfig.appName,

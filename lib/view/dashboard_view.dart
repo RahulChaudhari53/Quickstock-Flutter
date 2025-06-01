@@ -59,8 +59,9 @@ class _DashboardViewState extends State<DashboardView> {
           BottomNavigationBarItem(
             icon: Image.asset(
               "assets/icons/transaction.png",
-              width: 24,
-              height: 24,
+              width: 30,
+              height: 30,
+              color: Colors.black,
             ),
             label: "Transaction",
           ),
