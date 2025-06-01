@@ -71,6 +71,7 @@ class _LoginViewState extends State<LoginView> {
                   label: "Email",
                   hintText: "Enter your email",
                   prefixIcon: Icons.email_outlined,
+                  keyboardType: TextInputType.emailAddress,
                   validator: (value) {
                     if (value == null || value.isEmpty) {
                       return 'Email is required';
@@ -91,6 +92,7 @@ class _LoginViewState extends State<LoginView> {
                   label: "Password",
                   hintText: "Enter your password",
                   prefixIcon: Icons.lock_outline,
+                  keyboardType: TextInputType.text,
                   obscureText: true,
                   validator: (value) {
                     if (value == null || value.isEmpty) {
@@ -203,7 +205,10 @@ class _LoginViewState extends State<LoginView> {
                           MaterialPageRoute(builder: (_) => const SignupView()),
                         );
                       },
-                      child: const Text("Register Now"),
+                      child: const Text(
+                        "Register Now",
+                        style: TextStyle(fontSize: 16),
+                      ),
                     ),
                   ],
                 ),
