@@ -6,49 +6,17 @@ import 'package:quickstock/view/dashboard_view.dart';
 import 'package:quickstock/view/forgot_password_view.dart';
 import 'package:quickstock/view/signup_view.dart';
 
-class LoginPage extends StatefulWidget {
-  const LoginPage({super.key});
+class LoginView extends StatefulWidget {
+  const LoginView({super.key});
 
   @override
-  State<LoginPage> createState() => _LoginPageState();
+  State<LoginView> createState() => _LoginViewState();
 }
 
-class _LoginPageState extends State<LoginPage> {
+class _LoginViewState extends State<LoginView> {
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
-
-  int activeIndex = 0;
-  final List<String> _images = [
-    "assets/images/2093947.png",
-    "assets/images/4002758.png",
-    "assets/images/11244147.png",
-  ];
-
-  Timer? _timer; // Timer reference
-
-  @override
-  void initState() {
-    super.initState();
-    activeIndex = 1;
-    startTimer();
-  }
-
-  void startTimer() {
-    _timer = Timer.periodic(Duration(seconds: 5), (timer) {
-      if (mounted) {
-        setState(() {
-          activeIndex = (activeIndex + 1) % _images.length;
-        });
-      }
-    });
-  }
-
-  @override
-  void dispose() {
-    _timer?.cancel();
-    super.dispose();
-  }
 
   void handleLogin() {
     if (formKey.currentState!.validate()) {
@@ -62,6 +30,7 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       body: SingleChildScrollView(
         child: Padding(
           padding: EdgeInsets.all(20),
@@ -69,41 +38,30 @@ class _LoginPageState extends State<LoginPage> {
             key: formKey,
             child: Column(
               children: [
-                SizedBox(height: 50),
-                FadeInUp(
-                  child: Container(
-                    height: 300,
-                    child: Stack(
-                      children:
-                          _images.asMap().entries.map((entry) {
-                            int idx = entry.key;
-                            String img = entry.value;
-                            return Positioned.fill(
-                              child: AnimatedOpacity(
-                                opacity: activeIndex == idx ? 1.0 : 0.0,
-                                duration: Duration(seconds: 1),
-                                child: Image.asset(
-                                  img,
-                                  fit: BoxFit.contain,
-                                  width: 250,
-                                  height: 250,
-                                ),
-                              ),
-                            );
-                          }).toList(),
-                    ),
-                  ),
-                ),
                 SizedBox(height: 40),
+                // Wrap with a Container and Row
                 FadeInUp(
                   delay: Duration(milliseconds: 1000),
                   duration: Duration(milliseconds: 1500),
-                  child: Text(
-                    "Welcome back you've been missed!",
-                    textAlign: TextAlign.center,
-                    style: TextStyle(color: Colors.grey[700], fontSize: 16),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      Image.asset(
+                        alignment: Alignment.topLeft,
+                        'assets/logo/logo.png',
+                        width: 80,
+                        height: 80,
+                      ),
+                      SizedBox(height: 10),
+                      Text(
+                        "Welcome back you've been missed!",
+                        textAlign: TextAlign.center,
+                        style: TextStyle(color: Colors.grey[700], fontSize: 16),
+                      ),
+                    ],
                   ),
                 ),
+
                 SizedBox(height: 40),
                 FadeInUp(
                   delay: Duration(milliseconds: 1000),

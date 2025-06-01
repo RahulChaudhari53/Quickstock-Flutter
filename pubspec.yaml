@@ -62,7 +62,6 @@ flutter:
   assets:
     - assets/images/
     - assets/logo/
-    - assets/logo.png
     - assets/quickstock_logo.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
@@ -113,7 +112,7 @@ flutter:
     - family: Roboto-Thin
       fonts:
         - asset: assets/fonts/roboto/Roboto-Thin.ttf
-        
+
   #   - family: Trajan Pro
   #     fonts:
   #       - asset: fonts/TrajanPro.ttf
