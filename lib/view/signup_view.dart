@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:quickstock/common/build_social_button.dart';
+import 'package:quickstock/common/custom_elevated_button.dart';
+import 'package:quickstock/common/custom_text_form_field.dart';
+import 'package:quickstock/common/social_media_divider.dart';
 import 'package:quickstock/view/dashboard_view.dart';
-import 'package:quickstock/view/login_view.dart';
 
 class SignupView extends StatefulWidget {
   const SignupView({super.key});
@@ -30,7 +32,7 @@ class _SignupViewState extends State<SignupView> {
       );
     } else if (!_agreedToTerms) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
+        const SnackBar(
           content: Text('You must agree to the privacy policy and terms.'),
         ),
       );
@@ -43,9 +45,7 @@ class _SignupViewState extends State<SignupView> {
       appBar: AppBar(
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
-          onPressed: () {
-            Navigator.pop(context);
-          },
+          onPressed: () => Navigator.pop(context),
         ),
       ),
       body: SingleChildScrollView(
@@ -61,39 +61,37 @@ class _SignupViewState extends State<SignupView> {
                 style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
               ),
               const SizedBox(height: 30),
-      
-              // First name & Last name row
+
+              // First Name & Last Name row using CustomTextFormField
               Row(
                 children: [
                   Expanded(
-                    child: TextFormField(
+                    child: CustomTextFormField(
                       controller: firstNameController,
-                      decoration: InputDecoration(
-                        labelText: 'First Name',
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                      ),
+                      label: 'First Name',
+                      hintText: 'Enter first name',
+                      prefixIcon: Icons.person,
+                      keyboardType: TextInputType.name,
                       validator: (value) {
-                        if (value == null || value.isEmpty)
-                          {return 'First name is required';}
+                        if (value == null || value.isEmpty) {
+                          return 'First name is required';
+                        }
                         return null;
                       },
                     ),
                   ),
                   const SizedBox(width: 16),
                   Expanded(
-                    child: TextFormField(
+                    child: CustomTextFormField(
                       controller: lastNameController,
-                      decoration: InputDecoration(
-                        labelText: 'Last Name',
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                      ),
+                      label: 'Last Name',
+                      hintText: 'Enter last name',
+                      prefixIcon: Icons.person,
+                      keyboardType: TextInputType.name,
                       validator: (value) {
-                        if (value == null || value.isEmpty)
-                          {return 'Last name is required';}
+                        if (value == null || value.isEmpty) {
+                          return 'Last name is required';
+                        }
                         return null;
                       },
                     ),
@@ -101,77 +99,71 @@ class _SignupViewState extends State<SignupView> {
                 ],
               ),
               const SizedBox(height: 20),
-      
+
               // Email
-              TextFormField(
+              CustomTextFormField(
                 controller: emailController,
+                label: 'Email',
+                hintText: 'Enter email',
+                prefixIcon: Icons.email,
                 keyboardType: TextInputType.emailAddress,
-                decoration: InputDecoration(
-                  labelText: 'Email',
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                ),
                 validator: (value) {
-                  if (value == null || value.isEmpty)
-                    {return 'Email is required';}
+                  if (value == null || value.isEmpty) {
+                    return 'Email is required';
+                  }
                   if (!value.contains('@')) return 'Enter a valid email';
                   return null;
                 },
               ),
               const SizedBox(height: 20),
-      
+
               // Phone Number
-              TextFormField(
+              CustomTextFormField(
                 controller: phoneController,
+                label: 'Phone Number',
+                hintText: 'Enter phone number',
+                prefixIcon: Icons.phone,
                 keyboardType: TextInputType.phone,
-                decoration: InputDecoration(
-                  labelText: 'Phone Number',
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                ),
                 validator: (value) {
-                  if (value == null || value.isEmpty)
-                    {return 'Phone number is required';}
+                  if (value == null || value.isEmpty) {
+                    return 'Phone number is required';
+                  }
                   return null;
                 },
               ),
               const SizedBox(height: 20),
-      
-              // Password with toggle
-              TextFormField(
+
+              // Password with toggle using CustomTextFormField
+              CustomTextFormField(
                 controller: passwordController,
+                label: 'Password',
+                hintText: 'Enter password',
+                prefixIcon: Icons.lock,
                 obscureText: _obscurePassword,
-                decoration: InputDecoration(
-                  labelText: 'Password',
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10),
+                keyboardType: TextInputType.visiblePassword,
+                suffixIcon: IconButton(
+                  icon: Icon(
+                    _obscurePassword ? Icons.visibility_off : Icons.visibility,
                   ),
-                  suffixIcon: IconButton(
-                    icon: Icon(
-                      _obscurePassword
-                          ? Icons.visibility_off
-                          : Icons.visibility,
-                    ),
-                    onPressed: () {
-                      setState(() {
-                        _obscurePassword = !_obscurePassword;
-                      });
-                    },
-                  ),
+                  onPressed: () {
+                    setState(() {
+                      _obscurePassword = !_obscurePassword;
+                    });
+                  },
                 ),
                 validator: (value) {
-                  if (value == null || value.isEmpty)
-                    {return 'Password is required';}
-                  if (value.length < 6)
-                    {return 'Password must be at least 6 characters';}
+                  if (value == null || value.isEmpty) {
+                    return 'Password is required';
+                  }
+                  if (value.length < 6) {
+                    return 'Password must be at least 6 characters';
+                  }
                   return null;
                 },
               ),
               const SizedBox(height: 20),
-      
-              // Checkbox for privacy policy & terms
+
+              // Checkbox for terms agreement
               Row(
                 children: [
                   Checkbox(
@@ -187,90 +179,44 @@ class _SignupViewState extends State<SignupView> {
                       onTap: () {},
                       child: const Text(
                         "I agree to the privacy policy and terms of use",
-                        style: TextStyle(
-                          decoration: TextDecoration.underline,
-                        ),
+                        style: TextStyle(decoration: TextDecoration.underline),
                       ),
                     ),
                   ),
                 ],
               ),
               const SizedBox(height: 20),
-      
-              // Create Account button
-              SizedBox(
+
+              // Create Account button using CustomElevatedButton
+              CustomElevatedButton(
+                onPressed: handleNavigate,
                 width: double.infinity,
                 height: 50,
-                child: ElevatedButton(
-                  onPressed: handleNavigate,
-                  style: ElevatedButton.styleFrom(
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                  ),
-                  child: const Text(
-                    "Create Account",
-                    style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
+                backgroundColor: Colors.blue,
+                foregroundColor: Colors.white,
+                child: const Text(
+                  "Create Account",
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                 ),
               ),
               const SizedBox(height: 30),
-      
+
               // Divider Or Sign Up With
-              Row(
-                children: [
-                  Expanded(child: Divider(thickness: 1)),
-                  const Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 8.0),
-                    child: Text("Or Sign Up With"),
-                  ),
-                  Expanded(child: Divider(thickness: 1)),
-                ],
-              ),
+              const SocialMediaDivider(type: "Sign Up"),
               const SizedBox(height: 30),
-      
-              // Google & Apple Buttons
+
+              // Social login buttons using BuildSocialButton
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  // Google button
-                  SizedBox(
-                    height: 50,
-                    width: 120,
-                    child: ElevatedButton.icon(
-                      onPressed: () {},
-                      icon: const FaIcon(FontAwesomeIcons.google, size: 18,),
-                      label: const Text('Google'),
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.white,
-                        foregroundColor: Colors.black,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        side: BorderSide(color: Colors.grey.shade400),
-                      ),
-                    ),
+                  BuildSocialButton(
+                    imagePath: 'assets/images/google_logo.png',
+                    onPressed: () {},
                   ),
                   const SizedBox(width: 30),
-                  // Apple button
-                  SizedBox(
-                    height: 50,
-                    width: 120,
-                    child: ElevatedButton.icon(
-                      onPressed: () {},
-                      icon: const Icon(Icons.apple, size: 24),
-                      label: const Text('Apple'),
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.black,
-                        foregroundColor: Colors.white,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                      ),
-                    ),
+                  BuildSocialButton(
+                    imagePath: 'assets/images/apple_logo_dark.png',
+                    onPressed: () {},
                   ),
                 ],
               ),
