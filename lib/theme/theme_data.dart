@@ -7,6 +7,18 @@ ThemeData getApplicationTheme() {
 
     primaryColor: Colors.black,
 
+    appBarTheme: const AppBarTheme(
+      backgroundColor: Colors.white,
+      foregroundColor: Colors.black,
+      elevation: 2,
+      titleTextStyle: TextStyle(
+        color: Colors.black87,
+        fontSize: 20,
+        fontWeight: FontWeight.w600,
+      ),
+      iconTheme: IconThemeData(color: Colors.black87),
+    ),
+
     inputDecorationTheme: InputDecorationTheme(
       filled: true,
       fillColor: Colors.grey.shade100,
