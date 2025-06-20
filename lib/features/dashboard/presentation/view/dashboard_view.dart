@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:quickstock/features/view/pages/home_view.dart';
-import 'package:quickstock/features/view/pages/inventory_view.dart';
-import 'package:quickstock/features/view/pages/profile_view.dart';
-import 'package:quickstock/features/view/pages/setting_view.dart';
-import 'package:quickstock/features/view/pages/transactions_view.dart';
+import 'package:quickstock/features/dashboard/pages/home_view.dart';
+import 'package:quickstock/features/dashboard/pages/inventory_view.dart';
+import 'package:quickstock/features/dashboard/pages/profile_view.dart';
+import 'package:quickstock/features/dashboard/pages/setting_view.dart';
+import 'package:quickstock/features/dashboard/pages/transactions_view.dart';
 
 class DashboardView extends StatefulWidget {
   const DashboardView({super.key});
