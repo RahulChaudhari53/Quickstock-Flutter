@@ -23,6 +23,7 @@ Future<void> _initHiveService() async {
   serviceLocator.registerLazySingleton(() => HiveService());
 }
 
+// User Module
 Future<void> _initUserModule() async {
   // ============== Data Source ==============
   serviceLocator.registerFactory(
@@ -58,10 +59,12 @@ Future<void> _initUserModule() async {
   );
 }
 
+// Dashboard Module
 Future<void> _initDashboardModule() async {
   serviceLocator.registerFactory(() => DashboardViewModel());
 }
 
+// Splash Module
 Future<void> _initSplashModule() async {
   serviceLocator.registerFactory(() => SplashViewModel());
 }

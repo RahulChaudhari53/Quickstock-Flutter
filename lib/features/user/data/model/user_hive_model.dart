@@ -21,19 +21,25 @@ class UserHiveModel {
   @HiveField(4)
   final String password;
 
+  // @HiveField(5)
+  // final List<String> phoneNumbers;
+
   @HiveField(5)
-  final List<String> phoneNumbers;
+  final String primaryPhone;
 
   @HiveField(6)
-  final String role;
+  final String? secondaryPhone;
 
   @HiveField(7)
-  final String? profileImage;
+  final String role;
 
   @HiveField(8)
-  final DateTime createdAt;
+  final String? profileImage;
 
   @HiveField(9)
+  final DateTime createdAt;
+
+  @HiveField(10)
   final DateTime updatedAt;
 
   const UserHiveModel({
@@ -41,7 +47,8 @@ class UserHiveModel {
     required this.firstName,
     required this.lastName,
     required this.email,
-    required this.phoneNumbers,
+    required this.primaryPhone,
+    this.secondaryPhone,
     this.profileImage,
     required this.role,
     required this.createdAt,
@@ -55,7 +62,8 @@ class UserHiveModel {
       lastName = '',
       email = '',
       password = '',
-      phoneNumbers = const [],
+      primaryPhone = "",
+      secondaryPhone = "",
       role = '',
       profileImage = '',
       createdAt = DateTime.fromMillisecondsSinceEpoch(0),
@@ -68,7 +76,9 @@ class UserHiveModel {
       lastName: user.lastName,
       email: user.email,
       password: user.password,
-      phoneNumbers: user.phoneNumbers,
+      primaryPhone: user.primaryPhone,
+      secondaryPhone: user.secondaryPhone,
+      // phoneNumbers: user.phoneNumbers,
       profileImage: user.profileImage,
       role: user.role,
       createdAt: user.createdAt,
@@ -83,7 +93,9 @@ class UserHiveModel {
       lastName: lastName,
       email: email,
       password: '',
-      phoneNumbers: phoneNumbers,
+      primaryPhone: primaryPhone,
+      secondaryPhone: secondaryPhone,
+      // phoneNumbers: phoneNumbers,
       profileImage: profileImage,
       role: role,
       createdAt: createdAt,

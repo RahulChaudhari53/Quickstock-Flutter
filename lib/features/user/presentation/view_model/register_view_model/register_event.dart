@@ -7,7 +7,7 @@ class UserRegisterEvent extends RegisterEvent {
   final BuildContext context;
   final String firstName;
   final String lastName;
-  final String phoneNumber;
+  final String primaryPhone;
   final String email;
   final String password;
   final bool agreedToTerms;
@@ -16,7 +16,7 @@ class UserRegisterEvent extends RegisterEvent {
     required this.context,
     required this.firstName,
     required this.lastName,
-    required this.phoneNumber,
+    required this.primaryPhone,
     required this.email,
     required this.password,
     required this.agreedToTerms,

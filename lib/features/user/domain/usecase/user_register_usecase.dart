@@ -9,14 +9,16 @@ import 'package:uuid/uuid.dart';
 class RegisterUserParams extends Equatable {
   final String firstName;
   final String lastName;
-  final List<String> phoneNumbers;
+  // final List<String> phoneNumbers;
+  final String primaryPhone;
   final String email;
   final String password;
 
   const RegisterUserParams({
     required this.firstName,
     required this.lastName,
-    required this.phoneNumbers,
+    required this.primaryPhone,
+    // required this.phoneNumbers,
     required this.email,
     required this.password,
   });
@@ -24,7 +26,8 @@ class RegisterUserParams extends Equatable {
   const RegisterUserParams.initial({
     required this.firstName,
     required this.lastName,
-    required this.phoneNumbers,
+    required this.primaryPhone,
+    // required this.phoneNumbers,
     required this.email,
     required this.password,
   });
@@ -33,7 +36,8 @@ class RegisterUserParams extends Equatable {
   List<Object?> get props => [
     firstName,
     lastName,
-    phoneNumbers,
+    primaryPhone,
+    // phoneNumbers,
     email,
     password,
   ];
@@ -52,7 +56,8 @@ class UserRegisterUsecase
       userId: const Uuid().v4().toString(),
       firstName: params.firstName,
       lastName: params.lastName,
-      phoneNumbers: params.phoneNumbers,
+      primaryPhone: params.primaryPhone,
+      // phoneNumbers: params.phoneNumbers,
       email: params.email,
       password: params.password,
       role: "shop_owner",
