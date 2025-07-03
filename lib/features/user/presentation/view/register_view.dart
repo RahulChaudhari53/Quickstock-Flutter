@@ -16,16 +16,16 @@ class RegisterView extends StatelessWidget {
     text: "Test",
   );
   final TextEditingController lastNameController = TextEditingController(
-    text: "One",
+    text: "Mobile",
   );
   final TextEditingController emailController = TextEditingController(
-    text: "test@example.com",
+    text: "mobile@example.com",
   );
   final TextEditingController phoneController = TextEditingController(
-    text: "9898989898",
+    text: "1010101010",
   );
   final TextEditingController passwordController = TextEditingController(
-    text: "test@123",
+    text: "Mobile@123",
   );
 
   final ValueNotifier<bool> obscurePassword = ValueNotifier(true);

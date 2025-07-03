@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:quickstock/app_config.dart';
 import 'package:quickstock/features/splash/presentation/view_model/splash_view_model.dart';
 
 class SplashView extends StatelessWidget {
