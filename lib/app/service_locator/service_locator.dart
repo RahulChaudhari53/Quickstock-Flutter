@@ -1,9 +1,13 @@
+import 'package:dio/dio.dart';
 import 'package:get_it/get_it.dart';
+import 'package:quickstock/core/network/api_service.dart';
 import 'package:quickstock/core/network/hive_service.dart';
 import 'package:quickstock/features/dashboard/presentation/view_model/dashboard_view_model.dart';
 import 'package:quickstock/features/splash/presentation/view_model/splash_view_model.dart';
 import 'package:quickstock/features/user/data/data_source/local_data_source/user_local_data_source.dart';
+import 'package:quickstock/features/user/data/data_source/remote_data_source/user_remote_data_source.dart';
 import 'package:quickstock/features/user/data/repository/local_repository/user_local_repository.dart';
+import 'package:quickstock/features/user/data/repository/remote_repository/user_remote_repository.dart';
 import 'package:quickstock/features/user/domain/usecase/user_login_usecase.dart';
 import 'package:quickstock/features/user/domain/usecase/user_register_usecase.dart';
 import 'package:quickstock/features/user/presentation/view_model/login_view_model/login_view_model.dart';
@@ -13,6 +17,7 @@ final serviceLocator = GetIt.instance;
 
 Future<void> initDependencies() async {
   await _initHiveService();
+  await _initApiService();
 
   await _initSplashModule();
   await _initUserModule();
@@ -23,11 +28,19 @@ Future<void> _initHiveService() async {
   serviceLocator.registerLazySingleton(() => HiveService());
 }
 
+Future<void> _initApiService() async {
+  serviceLocator.registerLazySingleton(() => ApiService(Dio()));
+}
+
 // User Module
 Future<void> _initUserModule() async {
   // ============== Data Source ==============
   serviceLocator.registerFactory(
     () => UserLocalDataSource(hiveService: serviceLocator<HiveService>()),
+  );
+
+  serviceLocator.registerFactory(
+    () => UserRemoteDatasource(apiService: serviceLocator<ApiService>()),
   );
 
   // ============== Repository ==============
@@ -37,19 +50,38 @@ Future<void> _initUserModule() async {
     ),
   );
 
+  serviceLocator.registerFactory(
+    () => UserRemoteRepository(
+      userRemoteDatasource: serviceLocator<UserRemoteDatasource>(),
+    ),
+  );
+
   // ============== Usecase ==============
+  // serviceLocator.registerFactory(
+  //   () => UserRegisterUsecase(
+  //     iUserRepository: serviceLocator<UserLocalRepository>(),
+  //   ),
+  // );
+
+  // serviceLocator.registerFactory(
+  //   () => UserLoginUsecase(
+  //     iUserRepository: serviceLocator<UserLocalRepository>(),
+  //   ),
+  // );
+
   serviceLocator.registerFactory(
     () => UserRegisterUsecase(
-      iUserRepository: serviceLocator<UserLocalRepository>(),
+      iUserRepository: serviceLocator<UserRemoteRepository>(),
     ),
   );
 
   serviceLocator.registerFactory(
     () => UserLoginUsecase(
-      iUserRepository: serviceLocator<UserLocalRepository>(),
+      iUserRepository: serviceLocator<UserRemoteRepository>(),
     ),
   );
 
+  // ============== View Models ==============
   serviceLocator.registerFactory(
     () => RegisterViewModel(serviceLocator<UserRegisterUsecase>()),
   );
