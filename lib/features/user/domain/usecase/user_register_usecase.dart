@@ -6,10 +6,13 @@ import 'package:quickstock/features/user/domain/entity/user_entity.dart';
 import 'package:quickstock/features/user/domain/repository/user_repository.dart';
 import 'package:uuid/uuid.dart';
 
+// ➤ Type aliases for dependency injection
+typedef UuidGenerator = String Function();
+typedef DateTimeProvider = DateTime Function();
+
 class RegisterUserParams extends Equatable {
   final String firstName;
   final String lastName;
-  // final List<String> phoneNumbers;
   final String primaryPhone;
   final String email;
   final String password;
@@ -18,16 +21,6 @@ class RegisterUserParams extends Equatable {
     required this.firstName,
     required this.lastName,
     required this.primaryPhone,
-    // required this.phoneNumbers,
-    required this.email,
-    required this.password,
-  });
-
-  const RegisterUserParams.initial({
-    required this.firstName,
-    required this.lastName,
-    required this.primaryPhone,
-    // required this.phoneNumbers,
     required this.email,
     required this.password,
   });
@@ -37,7 +30,6 @@ class RegisterUserParams extends Equatable {
     firstName,
     lastName,
     primaryPhone,
-    // phoneNumbers,
     email,
     password,
   ];
@@ -46,23 +38,31 @@ class RegisterUserParams extends Equatable {
 class UserRegisterUsecase
     implements UsecaseWithParams<void, RegisterUserParams> {
   final IUserRepository _iUserRepository;
+  final UuidGenerator _uuidGenerator;
+  final DateTimeProvider _dateTimeProvider;
 
-  UserRegisterUsecase({required IUserRepository iUserRepository})
-    : _iUserRepository = iUserRepository;
+  UserRegisterUsecase({
+    required IUserRepository iUserRepository,
+    UuidGenerator? uuidGenerator,
+    DateTimeProvider? dateTimeProvider,
+  }) : _iUserRepository = iUserRepository,
+       _uuidGenerator = uuidGenerator ?? const Uuid().v4,
+       _dateTimeProvider = dateTimeProvider ?? DateTime.now;
 
   @override
   Future<Either<Failure, void>> call(RegisterUserParams params) {
+    final now = _dateTimeProvider();
+
     final userEntity = UserEntity(
-      userId: const Uuid().v4().toString(),
+      userId: _uuidGenerator(),
       firstName: params.firstName,
       lastName: params.lastName,
       primaryPhone: params.primaryPhone,
-      // phoneNumbers: params.phoneNumbers,
       email: params.email,
       password: params.password,
-      role: "shop_owner",
-      createdAt: DateTime.now(),
-      updatedAt: DateTime.now(),
+      role: 'shop_owner',
+      createdAt: now,
+      updatedAt: now,
     );
 
     return _iUserRepository.registerUser(userEntity);
