@@ -7,7 +7,7 @@ class ApiEndpoints {
 
   // Emulator server
   // static const String serverAddress = "http://10.0.2.2:5050";
-  static const String serverAddress = "http://192.168.1.65:5050";
+  static const String serverAddress = "http://192.168.1.72:5050";
 
   static const String baseUrl = "$serverAddress/api/users/";
 
