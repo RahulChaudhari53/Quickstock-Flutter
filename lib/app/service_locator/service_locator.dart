@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:get_it/get_it.dart';
+import 'package:quickstock/app/shared_pref/token_shared_pref.dart';
 import 'package:quickstock/core/network/api_service.dart';
 import 'package:quickstock/core/network/hive_service.dart';
 import 'package:quickstock/features/dashboard/presentation/view_model/dashboard_view_model.dart';
@@ -12,12 +13,14 @@ import 'package:quickstock/features/user/domain/usecase/user_login_usecase.dart'
 import 'package:quickstock/features/user/domain/usecase/user_register_usecase.dart';
 import 'package:quickstock/features/user/presentation/view_model/login_view_model/login_view_model.dart';
 import 'package:quickstock/features/user/presentation/view_model/register_view_model/register_view_model.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 final serviceLocator = GetIt.instance;
 
 Future<void> initDependencies() async {
   await _initHiveService();
   await _initApiService();
+  await _initSharedPref();
 
   await _initSplashModule();
   await _initUserModule();
@@ -30,6 +33,15 @@ Future<void> _initHiveService() async {
 
 Future<void> _initApiService() async {
   serviceLocator.registerLazySingleton(() => ApiService(Dio()));
+}
+
+Future<void> _initSharedPref() async {
+  final sharedPref = await SharedPreferences.getInstance();
+  serviceLocator.registerLazySingleton(() => sharedPref);
+  serviceLocator.registerLazySingleton(
+    () =>
+        TokenSharedPref(sharedPreferences: serviceLocator<SharedPreferences>()),
+  );
 }
 
 // User Module
@@ -77,6 +89,7 @@ Future<void> _initUserModule() async {
 
   serviceLocator.registerFactory(
     () => UserLoginUsecase(
+      tokenSharedPref: serviceLocator<TokenSharedPref>(),
       iUserRepository: serviceLocator<UserRemoteRepository>(),
     ),
   );
