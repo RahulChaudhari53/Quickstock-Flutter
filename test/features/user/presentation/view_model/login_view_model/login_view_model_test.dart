@@ -58,7 +58,7 @@ void main() {
       },
       act:
           (bloc) => bloc.add(
-            const LoginWithPhoneNumberAndPasswordEvent(
+            LoginWithPhoneNumberAndPasswordEvent(
               phoneNumber: '1234567890',
               password: 'passwojriorao',
             ),

@@ -240,7 +240,7 @@ class LoginView extends StatelessWidget {
                       TextButton(
                         onPressed: () {
                           context.read<LoginViewModel>().add(
-                            NavigateToRegisterViewEvent(),
+                            NavigateToRegisterViewEvent(context: context),
                           );
                         },
                         child: const Text(
