@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 sealed class RegisterEvent {}
 
 class UserRegisterEvent extends RegisterEvent {
-  final BuildContext context;
   final String firstName;
   final String lastName;
   final String primaryPhone;
@@ -13,7 +12,6 @@ class UserRegisterEvent extends RegisterEvent {
   final bool agreedToTerms;
 
   UserRegisterEvent({
-    required this.context,
     required this.firstName,
     required this.lastName,
     required this.primaryPhone,
