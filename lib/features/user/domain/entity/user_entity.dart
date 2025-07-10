@@ -29,6 +29,21 @@ class UserEntity extends Equatable {
     required this.updatedAt,
   });
 
+  factory UserEntity.empty() {
+    return UserEntity(
+      firstName: '',
+      lastName: '',
+      email: '',
+      primaryPhone: '',
+      secondaryPhone: null,
+      profileImage: null,
+      role: '',
+      password: '',
+      createdAt: DateTime.fromMillisecondsSinceEpoch(0),
+      updatedAt: DateTime.fromMillisecondsSinceEpoch(0),
+    );
+  }
+
   @override
   List<Object?> get props => [
     userId,
