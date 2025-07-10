@@ -13,53 +13,6 @@ class RegisterViewModel extends Bloc<RegisterEvent, RegisterState> {
     on<UserRegisterEvent>(_onUserRegister);
   }
 
-  // Future<void> _onUserRegister(
-  //   UserRegisterEvent event,
-  //   Emitter<RegisterState> emit,
-  // ) async {
-  //   if (!event.agreedToTerms) {
-  //     showMySnackBar(
-  //       context: event.context,
-  //       message: "You must agree to the privacy policy and terms.",
-  //       color: Colors.red[400],
-  //     );
-  //     return;
-  //   }
-
-  //   emit(state.copyWith(isLoading: true));
-
-  //   final result = await _userRegisterUsecase(
-  //     RegisterUserParams(
-  //       firstName: event.firstName,
-  //       lastName: event.lastName,
-  //       email: event.email,
-  //       primaryPhone: event.primaryPhone,
-  //       // phoneNumbers: [event.phoneNumber],
-  //       password: event.password,
-  //     ),
-  //   );
-
-  //   result.fold(
-  //     (failure) {
-  //       emit(state.copyWith(isLoading: false, isSuccess: false));
-  //       showMySnackBar(
-  //         context: event.context,
-  //         message: failure.message,
-  //         color: Colors.red,
-  //       );
-  //     },
-  //     (_) {
-  //       emit(state.copyWith(isLoading: false, isSuccess: true));
-  //       showMySnackBar(
-  //         context: event.context,
-  //         message: "Successful signup. Please login.",
-  //         color: Colors.green[400],
-  //       );
-  //       Navigator.pop(event.context);
-  //     },
-  //   );
-  // }
-
   Future<void> _onUserRegister(
     UserRegisterEvent event,
     Emitter<RegisterState> emit,
