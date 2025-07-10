@@ -35,11 +35,9 @@ class RegisterView extends StatelessWidget {
     if (formKey.currentState!.validate()) {
       context.read<RegisterViewModel>().add(
         UserRegisterEvent(
-          context: context,
           firstName: firstNameController.text,
           lastName: lastNameController.text,
           primaryPhone: phoneController.text,
-          // phoneNumber: phoneController.text,
           email: emailController.text,
           password: passwordController.text,
           agreedToTerms: agreedToTerms.value,
@@ -58,7 +56,24 @@ class RegisterView extends StatelessWidget {
         ),
       ),
       body: BlocListener<RegisterViewModel, RegisterState>(
-        listener: (context, state) {},
+        listener: (context, state) {
+          if (state.errorMessage != null) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text(state.errorMessage!),
+                backgroundColor: Colors.red[400],
+              ),
+            );
+          } else if (state.isSuccess) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text("Successful signup. Please login."),
+                backgroundColor: Colors.green[400],
+              ),
+            );
+            Navigator.pop(context);
+          }
+        },
         child: SingleChildScrollView(
           padding: const EdgeInsets.all(16.0),
           child: Form(
