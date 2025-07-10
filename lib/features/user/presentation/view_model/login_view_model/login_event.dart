@@ -1,28 +1,31 @@
+import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 
 @immutable
-sealed class LoginEvent {}
+abstract class LoginEvent extends Equatable {
+  const LoginEvent();
+
+  @override
+  List<Object?> get props => [];
+}
 
 class NavigateToRegisterViewEvent extends LoginEvent {
-  final BuildContext context;
-
-  NavigateToRegisterViewEvent({required this.context});
+  const NavigateToRegisterViewEvent();
 }
 
 class NavigateToDashboardViewEvent extends LoginEvent {
-  final BuildContext context;
-
-  NavigateToDashboardViewEvent({required this.context});
+  const NavigateToDashboardViewEvent();
 }
 
 class LoginWithPhoneNumberAndPasswordEvent extends LoginEvent {
-  final BuildContext context;
   final String phoneNumber;
   final String password;
 
-  LoginWithPhoneNumberAndPasswordEvent({
-    required this.context,
+  const LoginWithPhoneNumberAndPasswordEvent({
     required this.phoneNumber,
     required this.password,
   });
+
+  @override
+  List<Object?> get props => [phoneNumber, password];
 }

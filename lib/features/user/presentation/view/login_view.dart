@@ -4,7 +4,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:quickstock/core/common/build_social_button.dart';
 import 'package:quickstock/core/common/custom_elevated_button.dart';
 import 'package:quickstock/core/common/custom_text_form_field.dart';
+import 'package:quickstock/core/common/snackbar/my_snackbar.dart';
 import 'package:quickstock/core/common/social_media_divider.dart';
+import 'package:quickstock/features/dashboard/presentation/view/dashboard_view.dart';
 import 'package:quickstock/features/forgot_password/presentation/view/forgot_password_view.dart';
 import 'package:quickstock/features/user/presentation/view_model/login_view_model/login_event.dart';
 import 'package:quickstock/features/user/presentation/view_model/login_view_model/login_state.dart';
@@ -27,7 +29,6 @@ class LoginView extends StatelessWidget {
     if (formKey.currentState!.validate()) {
       context.read<LoginViewModel>().add(
         LoginWithPhoneNumberAndPasswordEvent(
-          context: context,
           phoneNumber: phoneController.text,
           password: passwordController.text,
         ),
@@ -42,7 +43,18 @@ class LoginView extends StatelessWidget {
     return Scaffold(
       body: BlocListener<LoginViewModel, LoginState>(
         listener: (context, state) {
-          if (state.isSuccess) {}
+          if (state.errorMessage != null) {
+            showMySnackBar(
+              context: context,
+              message: state.errorMessage!,
+              color: Colors.red[400],
+            );
+          } else if (state.isSuccess) {
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(builder: (_) => DashboardView()),
+            );
+          }
         },
         child: SingleChildScrollView(
           padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 48),
@@ -228,7 +240,7 @@ class LoginView extends StatelessWidget {
                       TextButton(
                         onPressed: () {
                           context.read<LoginViewModel>().add(
-                            NavigateToRegisterViewEvent(context: context),
+                            NavigateToRegisterViewEvent(),
                           );
                         },
                         child: const Text(
