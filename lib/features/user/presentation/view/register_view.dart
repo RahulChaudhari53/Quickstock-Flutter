@@ -12,21 +12,28 @@ class RegisterView extends StatelessWidget {
   RegisterView({super.key});
 
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
-  final TextEditingController firstNameController = TextEditingController(
-    text: "Test",
-  );
-  final TextEditingController lastNameController = TextEditingController(
-    text: "Mobile",
-  );
-  final TextEditingController emailController = TextEditingController(
-    text: "mobile@example.com",
-  );
-  final TextEditingController phoneController = TextEditingController(
-    text: "1010101010",
-  );
-  final TextEditingController passwordController = TextEditingController(
-    text: "Mobile@123",
-  );
+
+  final TextEditingController firstNameController = TextEditingController();
+  final TextEditingController lastNameController = TextEditingController();
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController phoneController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
+
+  // final TextEditingController firstNameController = TextEditingController(
+  //   text: "Test",
+  // );
+  // final TextEditingController lastNameController = TextEditingController(
+  //   text: "Mobile",
+  // );
+  // final TextEditingController emailController = TextEditingController(
+  //   text: "mobile@example.com",
+  // );
+  // final TextEditingController phoneController = TextEditingController(
+  //   text: "1010101010",
+  // );
+  // final TextEditingController passwordController = TextEditingController(
+  //   text: "Mobile@123",
+  // );
 
   final ValueNotifier<bool> obscurePassword = ValueNotifier(true);
   final ValueNotifier<bool> agreedToTerms = ValueNotifier(false);
