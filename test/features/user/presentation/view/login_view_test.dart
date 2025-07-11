@@ -8,11 +8,11 @@ import 'package:quickstock/features/user/presentation/view_model/login_view_mode
 import 'package:quickstock/features/user/presentation/view_model/login_view_model/login_state.dart';
 import 'package:quickstock/features/user/presentation/view_model/login_view_model/login_view_model.dart';
 
-class MockLoginView extends MockBloc<LoginEvent, LoginState>
+class MockLoginViewModel extends MockBloc<LoginEvent, LoginState>
     implements LoginViewModel {}
 
 void main() {
-  late MockLoginView mockLoginView;
+  late MockLoginViewModel mockLoginView;
 
   Widget loadLoginView() {
     return BlocProvider<LoginViewModel>.value(
@@ -22,7 +22,7 @@ void main() {
   }
 
   setUp(() {
-    mockLoginView = MockLoginView();
+    mockLoginView = MockLoginViewModel();
     when(() => mockLoginView.state).thenReturn(LoginState.initial());
   });
 
