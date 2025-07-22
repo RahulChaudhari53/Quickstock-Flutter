@@ -1,10 +1,8 @@
-import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:quickstock/core/common/build_social_button.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:quickstock/core/common/custom_elevated_button.dart';
 import 'package:quickstock/core/common/custom_text_form_field.dart';
-import 'package:quickstock/core/common/social_media_divider.dart';
 import 'package:quickstock/features/forgot_password/presentation/view/forgot_password_view.dart';
 import 'package:quickstock/features/user/presentation/view_model/login_view_model/login_event.dart';
 import 'package:quickstock/features/user/presentation/view_model/login_view_model/login_state.dart';
@@ -16,17 +14,13 @@ class LoginView extends StatelessWidget {
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
   final TextEditingController phoneController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
-  // final TextEditingController phoneController = TextEditingController(
-  //   text: "1010101010",
-  // );
-  // final TextEditingController passwordController = TextEditingController(
-  //   text: "Mobile@123",
-  // );
   final ValueNotifier<bool> obscurePassword = ValueNotifier(true);
   final ValueNotifier<bool> rememberMe = ValueNotifier(false);
 
   void handleLogin(BuildContext context) {
-    if (formKey.currentState!.validate()) {
+    // Basic loading check to prevent multiple submissions
+    final isLoading = context.read<LoginViewModel>().state.isLoading;
+    if (!isLoading && formKey.currentState!.validate()) {
       context.read<LoginViewModel>().add(
         LoginWithPhoneNumberAndPasswordEvent(
           context: context,
@@ -40,208 +34,195 @@ class LoginView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final textTheme = theme.textTheme;
 
     return Scaffold(
       body: BlocListener<LoginViewModel, LoginState>(
         listener: (context, state) {
-          if (state.isSuccess) {}
+          if (state.isSuccess) {
+            // Handle successful login navigation
+          }
+          // You can also listen for error states to show snackbars
         },
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 48),
-          child: Form(
-            key: formKey,
-            child: Column(
-              children: [
-                FadeInUp(
-                  delay: const Duration(milliseconds: 1000),
-                  duration: const Duration(milliseconds: 1500),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Image.asset(
-                        'assets/logo/quickstock_logo.png',
-                        width: 150,
-                        height: 150,
-                      ),
-                      const SizedBox(height: 32),
-                      Text(
-                        "Welcome back, you've been missed!",
-                        textAlign: TextAlign.center,
-                        style: theme.textTheme.bodyMedium?.copyWith(
-                          fontSize: 18,
+        child: Center(
+          child: SingleChildScrollView(
+            child: Container(
+              constraints: const BoxConstraints(maxWidth: 450),
+              padding: const EdgeInsets.all(24),
+              child: Form(
+                key: formKey,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    // --- Header Section ---
+                    Column(
+                      children: [
+                        SvgPicture.asset(
+                          "assets/logo/quickstock-logo.svg",
+                          width: 50,
+                          height: 50,
+                          // colorFilter: ColorFilter.mode(
+                          //   theme
+                          //       .colorScheme
+                          //       .primary,
+                          //   BlendMode.srcIn,
+                          // ),
                         ),
-                      ),
-                    ],
-                  ),
-                ),
-                const SizedBox(height: 40),
-                FadeInUp(
-                  delay: const Duration(milliseconds: 1100),
-                  duration: const Duration(milliseconds: 1500),
-                  child: CustomTextFormField(
-                    controller: phoneController,
-                    label: "Phone Number",
-                    hintText: "Enter your phone number",
-                    prefixIcon: Icons.email_outlined,
-                    keyboardType: TextInputType.emailAddress,
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Phone Number is required';
-                      }
-                      if (value.length < 10) {
-                        return 'Enter a valid phone number';
-                      }
-                      return null;
-                    },
-                  ),
-                ),
-                const SizedBox(height: 20),
-                FadeInUp(
-                  delay: const Duration(milliseconds: 1200),
-                  duration: const Duration(milliseconds: 1500),
-                  child: ValueListenableBuilder<bool>(
-                    valueListenable: obscurePassword,
-                    builder: (context, isObscure, _) {
-                      return CustomTextFormField(
-                        controller: passwordController,
-                        label: "Password",
-                        hintText: "Enter your password",
-                        prefixIcon: Icons.lock_outline,
-                        keyboardType: TextInputType.text,
-                        obscureText: isObscure,
-                        suffixIcon: IconButton(
-                          icon: Icon(
-                            isObscure ? Icons.visibility_off : Icons.visibility,
+                        const SizedBox(height: 24),
+                        Text(
+                          "Welcome Back",
+                          textAlign: TextAlign.center,
+                          style: textTheme.headlineMedium?.copyWith(
+                            fontWeight: FontWeight.w600,
                           ),
-                          onPressed: () => obscurePassword.value = !isObscure,
                         ),
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'Password is required';
-                          }
-                          if (value.length < 6) {
-                            return 'Password must be at least 6 characters';
-                          }
-                          return null;
-                        },
-                      );
-                    },
-                  ),
-                ),
-                const SizedBox(height: 12),
-                FadeInUp(
-                  delay: const Duration(milliseconds: 1300),
-                  duration: const Duration(milliseconds: 1500),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      ValueListenableBuilder<bool>(
-                        valueListenable: rememberMe,
-                        builder: (context, value, _) {
-                          return Row(
-                            children: [
-                              Checkbox(
-                                value: value,
-                                onChanged:
-                                    (val) => rememberMe.value = val ?? false,
-                              ),
-                              const Text("Remember Me"),
-                            ],
-                          );
-                        },
-                      ),
-                      TextButton(
-                        onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (_) => const ForgotPasswordView(),
+                        const SizedBox(height: 8),
+                        Text(
+                          "Login to manage your inventory and orders",
+                          textAlign: TextAlign.center,
+                          style: textTheme.bodyLarge,
+                        ),
+                      ],
+                    ),
+
+                    const SizedBox(height: 40),
+
+                    // --- Form Fields ---
+                    CustomTextFormField(
+                      controller: phoneController,
+                      label: "Phone Number",
+                      prefixIcon: Icons.phone_outlined,
+                      keyboardType: TextInputType.phone,
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Phone Number is required';
+                        }
+                        if (value.length < 10) {
+                          return 'Enter a valid 10-digit phone number';
+                        }
+                        return null;
+                      },
+                    ),
+                    const SizedBox(height: 20),
+                    ValueListenableBuilder<bool>(
+                      valueListenable: obscurePassword,
+                      builder: (context, isObscure, _) {
+                        return CustomTextFormField(
+                          controller: passwordController,
+                          label: "Password",
+                          prefixIcon: Icons.lock_outline,
+                          obscureText: isObscure,
+                          keyboardType: TextInputType.text,
+                          suffixIcon: IconButton(
+                            icon: Icon(
+                              isObscure
+                                  ? Icons.visibility_off_outlined
+                                  : Icons.visibility_outlined,
                             ),
-                          );
-                        },
-                        child: const Text("Forgot Password?"),
-                      ),
-                    ],
-                  ),
-                ),
-                const SizedBox(height: 20),
-                FadeInUp(
-                  delay: const Duration(milliseconds: 1400),
-                  duration: const Duration(milliseconds: 1500),
-                  child: BlocBuilder<LoginViewModel, LoginState>(
-                    builder: (context, state) {
-                      return CustomElevatedButton(
-                        onPressed: () {
-                          if (!state.isLoading) {
-                            handleLogin(context);
-                          }
-                        },
-                        width: double.infinity,
-                        height: 55,
-                        child:
-                            state.isLoading
-                                ? const CircularProgressIndicator(
-                                  color: Colors.white,
-                                )
-                                : const Text("Login"),
-                      );
-                    },
-                  ),
-                ),
-                const SizedBox(height: 30),
-                FadeInUp(
-                  delay: const Duration(milliseconds: 1500),
-                  duration: const Duration(milliseconds: 1500),
-                  child: const SocialMediaDivider(type: "Login"),
-                ),
-                const SizedBox(height: 30),
-                FadeInUp(
-                  delay: const Duration(milliseconds: 1600),
-                  duration: const Duration(milliseconds: 1500),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      BuildSocialButton(
-                        imagePath: 'assets/images/google_logo.png',
-                        onPressed: () {},
-                      ),
-                      const SizedBox(width: 24),
-                      BuildSocialButton(
-                        imagePath: 'assets/images/apple_logo_dark.png',
-                        onPressed: () {},
-                      ),
-                    ],
-                  ),
-                ),
-                const SizedBox(height: 30),
-                FadeInUp(
-                  delay: const Duration(milliseconds: 1700),
-                  duration: const Duration(milliseconds: 1500),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        "Don't have an account?",
-                        style: theme.textTheme.bodyMedium?.copyWith(
-                          fontSize: 16,
-                          color: Colors.grey.shade600,
+                            onPressed: () => obscurePassword.value = !isObscure,
+                          ),
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'Password is required';
+                            }
+                            if (value.length < 6) {
+                              return 'Password must be at least 6 characters';
+                            }
+                            return null;
+                          },
+                        );
+                      },
+                    ),
+
+                    const SizedBox(height: 16),
+
+                    // --- Remember Me & Forgot Password ---
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        ValueListenableBuilder<bool>(
+                          valueListenable: rememberMe,
+                          builder: (context, value, _) {
+                            return InkWell(
+                              onTap: () => rememberMe.value = !value,
+                              borderRadius: BorderRadius.circular(8),
+                              child: Padding(
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 4.0,
+                                ),
+                                child: Row(
+                                  children: [
+                                    Checkbox(
+                                      value: value,
+                                      onChanged:
+                                          (val) =>
+                                              rememberMe.value = val ?? false,
+                                    ),
+                                    Text(
+                                      "Remember Me",
+                                      style: textTheme.labelMedium,
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            );
+                          },
                         ),
-                      ),
-                      TextButton(
-                        onPressed: () {
-                          context.read<LoginViewModel>().add(
-                            NavigateToRegisterViewEvent(context: context),
-                          );
-                        },
-                        child: const Text(
-                          "Register Now",
-                          style: TextStyle(fontSize: 16),
+                        TextButton(
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (_) => const ForgotPasswordView(),
+                              ),
+                            );
+                          },
+                          child: const Text("Forgot Password?"),
                         ),
-                      ),
-                    ],
-                  ),
+                      ],
+                    ),
+
+                    const SizedBox(height: 24),
+
+                    // --- Login Button ---
+                    BlocBuilder<LoginViewModel, LoginState>(
+                      builder: (context, state) {
+                        return CustomElevatedButton(
+                          onPressed: () => handleLogin(context),
+                          height: 56,
+                          child:
+                              state.isLoading
+                                  ? const CircularProgressIndicator(
+                                    color: Colors.white,
+                                  )
+                                  : const Text("Login"),
+                        );
+                      },
+                    ),
+
+                    const SizedBox(height: 32),
+
+                    // --- Sign Up Link ---
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          "Don't have an account?",
+                          style: textTheme.bodyMedium,
+                        ),
+                        TextButton(
+                          onPressed: () {
+                            context.read<LoginViewModel>().add(
+                              NavigateToRegisterViewEvent(context: context),
+                            );
+                          },
+                          child: const Text("Sign Up"),
+                        ),
+                      ],
+                    ),
+                  ],
                 ),
-              ],
+              ),
             ),
           ),
         ),
