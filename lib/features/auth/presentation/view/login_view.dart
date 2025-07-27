@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:quickstock/core/common/custom_elevated_button.dart';
 import 'package:quickstock/core/common/custom_text_form_field.dart';
-import 'package:quickstock/features/auth/presentation/view/forgot_password_view.dart';
+import 'package:quickstock/features/password_reset/presentation/view/forgot_password_view.dart';
 import 'package:quickstock/features/auth/presentation/view_model/login_view_model/login_event.dart';
 import 'package:quickstock/features/auth/presentation/view_model/login_view_model/login_state.dart';
 import 'package:quickstock/features/auth/presentation/view_model/login_view_model/login_view_model.dart';

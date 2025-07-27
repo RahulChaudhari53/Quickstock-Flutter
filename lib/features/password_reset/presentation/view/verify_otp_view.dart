@@ -2,7 +2,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:pinput/pinput.dart';
 import 'package:quickstock/core/common/custom_elevated_button.dart';
-import 'package:quickstock/features/auth/presentation/view/reset_password_view.dart';
+import 'package:quickstock/features/password_reset/presentation/view/reset_password_view.dart';
 
 class VerifyOtpView extends StatefulWidget {
   final String email;

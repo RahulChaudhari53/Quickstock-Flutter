@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:quickstock/core/common/custom_elevated_button.dart';
 import 'package:quickstock/core/common/custom_text_form_field.dart';
-import 'package:quickstock/features/auth/presentation/view/verify_otp_view.dart';
+import 'package:quickstock/features/password_reset/presentation/view/verify_otp_view.dart';
 
 class ForgotPasswordView extends StatelessWidget {
   ForgotPasswordView({super.key});
