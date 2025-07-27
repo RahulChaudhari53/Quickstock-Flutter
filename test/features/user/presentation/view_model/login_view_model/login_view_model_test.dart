@@ -5,10 +5,10 @@ import 'package:mocktail/mocktail.dart';
 import 'package:dartz/dartz.dart';
 
 import 'package:quickstock/core/error/failure.dart';
-import 'package:quickstock/features/user/domain/usecase/user_login_usecase.dart';
-import 'package:quickstock/features/user/presentation/view_model/login_view_model/login_event.dart';
-import 'package:quickstock/features/user/presentation/view_model/login_view_model/login_state.dart';
-import 'package:quickstock/features/user/presentation/view_model/login_view_model/login_view_model.dart';
+import 'package:quickstock/features/auth/domain/usecase/user_login_usecase.dart';
+import 'package:quickstock/features/auth/presentation/view_model/login_view_model/login_event.dart';
+import 'package:quickstock/features/auth/presentation/view_model/login_view_model/login_state.dart';
+import 'package:quickstock/features/auth/presentation/view_model/login_view_model/login_view_model.dart';
 
 class MockUserLoginUsecase extends Mock implements UserLoginUsecase {}
 

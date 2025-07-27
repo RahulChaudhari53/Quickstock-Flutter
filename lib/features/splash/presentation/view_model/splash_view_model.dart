@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:quickstock/app/service_locator/service_locator.dart';
 import 'dart:async';
-import 'package:quickstock/features/user/presentation/view/login_view.dart';
-import 'package:quickstock/features/user/presentation/view_model/login_view_model/login_view_model.dart';
+import 'package:quickstock/features/auth/presentation/view/login_view.dart';
+import 'package:quickstock/features/auth/presentation/view_model/login_view_model/login_view_model.dart';
 
 class SplashViewModel extends Cubit<void> {
   SplashViewModel() : super(null);

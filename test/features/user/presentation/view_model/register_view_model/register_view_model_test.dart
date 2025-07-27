@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:bloc_test/bloc_test.dart';
 import 'package:mocktail/mocktail.dart';
-import 'package:quickstock/features/user/domain/usecase/user_register_usecase.dart';
+import 'package:quickstock/features/auth/domain/usecase/user_register_usecase.dart';
 import 'package:quickstock/core/error/failure.dart';
 import 'package:dartz/dartz.dart';
-import 'package:quickstock/features/user/presentation/view_model/register_view_model/register_event.dart';
-import 'package:quickstock/features/user/presentation/view_model/register_view_model/register_state.dart';
-import 'package:quickstock/features/user/presentation/view_model/register_view_model/register_view_model.dart';
+import 'package:quickstock/features/auth/presentation/view_model/register_view_model/register_event.dart';
+import 'package:quickstock/features/auth/presentation/view_model/register_view_model/register_state.dart';
+import 'package:quickstock/features/auth/presentation/view_model/register_view_model/register_view_model.dart';
 
 class MockUserRegisterUsecase extends Mock implements UserRegisterUsecase {}
 
@@ -44,7 +44,7 @@ void main() {
       act:
           (bloc) => bloc.add(
             UserRegisterEvent(
-              context: FakeBuildContext(), // Provide a fake BuildContext
+              context: FakeBuildContext(), // Providing a fake BuildContext
               firstName: 'John',
               lastName: 'Doe',
               email: 'john@example.com',

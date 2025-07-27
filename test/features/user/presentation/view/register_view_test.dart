@@ -1,13 +1,12 @@
 import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
-import 'package:quickstock/features/user/presentation/view/register_view.dart';
-import 'package:quickstock/features/user/presentation/view_model/register_view_model/register_event.dart';
-import 'package:quickstock/features/user/presentation/view_model/register_view_model/register_state.dart';
-import 'package:quickstock/features/user/presentation/view_model/register_view_model/register_view_model.dart';
+import 'package:quickstock/features/auth/presentation/view/register_view.dart';
+import 'package:quickstock/features/auth/presentation/view_model/register_view_model/register_event.dart';
+import 'package:quickstock/features/auth/presentation/view_model/register_view_model/register_state.dart';
+import 'package:quickstock/features/auth/presentation/view_model/register_view_model/register_view_model.dart';
 
 class MockRegisterViewModel extends MockBloc<RegisterEvent, RegisterState>
     implements RegisterViewModel {}

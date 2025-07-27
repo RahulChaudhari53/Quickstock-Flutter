@@ -2,8 +2,8 @@ import 'package:dartz/dartz.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:quickstock/core/error/failure.dart';
-import 'package:quickstock/features/user/domain/entity/user_entity.dart';
-import 'package:quickstock/features/user/domain/usecase/user_register_usecase.dart';
+import 'package:quickstock/features/auth/domain/entity/user_entity.dart';
+import 'package:quickstock/features/auth/domain/usecase/user_register_usecase.dart';
 
 import 'repository.mock.dart';
 

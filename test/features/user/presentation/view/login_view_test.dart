@@ -3,10 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
-import 'package:quickstock/features/user/presentation/view/login_view.dart';
-import 'package:quickstock/features/user/presentation/view_model/login_view_model/login_event.dart';
-import 'package:quickstock/features/user/presentation/view_model/login_view_model/login_state.dart';
-import 'package:quickstock/features/user/presentation/view_model/login_view_model/login_view_model.dart';
+import 'package:quickstock/features/auth/presentation/view/login_view.dart';
+import 'package:quickstock/features/auth/presentation/view_model/login_view_model/login_event.dart';
+import 'package:quickstock/features/auth/presentation/view_model/login_view_model/login_state.dart';
+import 'package:quickstock/features/auth/presentation/view_model/login_view_model/login_view_model.dart';
 
 class MockLoginViewModel extends MockBloc<LoginEvent, LoginState>
     implements LoginViewModel {}
