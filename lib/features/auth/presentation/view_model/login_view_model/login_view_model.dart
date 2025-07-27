@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:quickstock/app/service_locator/service_locator.dart';
 import 'package:quickstock/core/common/snackbar/my_snackbar.dart';
+import 'package:quickstock/features/forgot_password/presentation/view/forgot_password_view.dart';
 import 'package:quickstock/features/home/presentation/view/home_view.dart';
 import 'package:quickstock/features/home/presentation/view_model/home_view_model.dart';
 import 'package:quickstock/features/auth/domain/usecase/user_login_usecase.dart';
@@ -18,6 +19,7 @@ class LoginViewModel extends Bloc<LoginEvent, LoginState> {
     on<NavigateToDashboardViewEvent>(_navigateToDashboardView);
     on<NavigateToRegisterViewEvent>(_navigateToRegisterView);
     on<LoginWithPhoneNumberAndPasswordEvent>(_loginWithPhoneAndPassword);
+    on<NavigateToForgotPasswordViewEvent>(_navigateToForgotPasswordView);
   }
 
   void _navigateToDashboardView(
@@ -60,6 +62,22 @@ class LoginViewModel extends Bloc<LoginEvent, LoginState> {
                   child: RegisterView(),
                 ),
           ),
+        );
+      }
+    } catch (_) {
+      // ignore in unit tests
+    }
+  }
+
+  void _navigateToForgotPasswordView(
+    NavigateToForgotPasswordViewEvent event,
+    Emitter<LoginState> emit,
+  ) {
+    try {
+      if (event.context.mounted) {
+        Navigator.push(
+          event.context,
+          MaterialPageRoute(builder: (context) => ForgotPasswordView()),
         );
       }
     } catch (_) {

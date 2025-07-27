@@ -26,3 +26,9 @@ class LoginWithPhoneNumberAndPasswordEvent extends LoginEvent {
     required this.password,
   });
 }
+
+class NavigateToForgotPasswordViewEvent extends LoginEvent {
+  final BuildContext context;
+
+  NavigateToForgotPasswordViewEvent({required this.context});
+}
