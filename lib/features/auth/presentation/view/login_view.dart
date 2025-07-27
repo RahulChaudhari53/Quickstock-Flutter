@@ -3,7 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:quickstock/core/common/custom_elevated_button.dart';
 import 'package:quickstock/core/common/custom_text_form_field.dart';
-import 'package:quickstock/features/password_reset/presentation/view/forgot_password_view.dart';
 import 'package:quickstock/features/auth/presentation/view_model/login_view_model/login_event.dart';
 import 'package:quickstock/features/auth/presentation/view_model/login_view_model/login_state.dart';
 import 'package:quickstock/features/auth/presentation/view_model/login_view_model/login_view_model.dart';
@@ -37,9 +36,7 @@ class LoginView extends StatelessWidget {
 
     return Scaffold(
       body: BlocConsumer<LoginViewModel, LoginState>(
-        listener: (context, state) {
-          // Navigation is handled via event in ViewModel
-        },
+        listener: (context, state) {},
         builder: (context, state) {
           return Center(
             child: SingleChildScrollView(
@@ -150,10 +147,9 @@ class LoginView extends StatelessWidget {
                           ),
                           TextButton(
                             onPressed: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (_) => ForgotPasswordView(),
+                              context.read<LoginViewModel>().add(
+                                NavigateToForgotPasswordViewEvent(
+                                  context: context,
                                 ),
                               );
                             },
