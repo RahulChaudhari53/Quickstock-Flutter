@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:quickstock/app/service_locator/service_locator.dart';
 import 'package:quickstock/core/common/snackbar/my_snackbar.dart';
-import 'package:quickstock/features/home/presentation/view/dashboard_view.dart';
-import 'package:quickstock/features/home/presentation/view_model/dashboard_view_model.dart';
+import 'package:quickstock/features/home/presentation/view/home_view.dart';
+import 'package:quickstock/features/home/presentation/view_model/home_view_model.dart';
 import 'package:quickstock/features/auth/domain/usecase/user_login_usecase.dart';
 import 'package:quickstock/features/auth/domain/usecase/user_register_usecase.dart';
 import 'package:quickstock/features/auth/presentation/view/register_view.dart';
@@ -32,7 +32,7 @@ class LoginViewModel extends Bloc<LoginEvent, LoginState> {
             builder:
                 (context) => BlocProvider.value(
                   value: serviceLocator<DashboardViewModel>(),
-                  child: DashboardView(),
+                  child: HomeView(),
                 ),
           ),
         );

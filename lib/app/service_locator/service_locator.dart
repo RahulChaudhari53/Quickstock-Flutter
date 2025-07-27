@@ -3,7 +3,7 @@ import 'package:get_it/get_it.dart';
 import 'package:quickstock/app/shared_pref/token_shared_pref.dart';
 import 'package:quickstock/core/network/api_service.dart';
 import 'package:quickstock/core/network/hive_service.dart';
-import 'package:quickstock/features/home/presentation/view_model/dashboard_view_model.dart';
+import 'package:quickstock/features/home/presentation/view_model/home_view_model.dart';
 import 'package:quickstock/features/splash/presentation/view_model/splash_view_model.dart';
 import 'package:quickstock/features/auth/data/data_source/local_data_source/user_local_data_source.dart';
 import 'package:quickstock/features/auth/data/data_source/remote_data_source/user_remote_data_source.dart';

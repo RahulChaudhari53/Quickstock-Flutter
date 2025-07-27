@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-class DashboardView extends StatefulWidget {
-  const DashboardView({super.key});
+class HomeView extends StatefulWidget {
+  const HomeView({super.key});
 
   @override
-  State<DashboardView> createState() => _DashboardViewState();
+  State<HomeView> createState() => _HomeViewState();
 }
 
-class _DashboardViewState extends State<DashboardView> {
+class _HomeViewState extends State<HomeView> {
   int selectedIndex = 0;
   void onItemTapped(int index) {
     setState(() {
