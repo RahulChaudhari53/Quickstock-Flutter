@@ -13,7 +13,7 @@ import 'package:quickstock/features/forgot_password/domain/usecase/verify_otp_us
 import 'package:quickstock/features/forgot_password/presentation/viewmodel/reset_password_viewmodel/reset_password_viewmodel.dart';
 import 'package:quickstock/features/forgot_password/presentation/viewmodel/send_otp_viewmodel/send_otp_view_model.dart';
 import 'package:quickstock/features/forgot_password/presentation/viewmodel/verify_otp_viewmodel/verify_otp_view_model.dart';
-import 'package:quickstock/features/home/presentation/view_model/home_view_model.dart';
+import 'package:quickstock/features/dashboard/presentation/view_model/home_view_model.dart';
 import 'package:quickstock/features/splash/presentation/view_model/splash_view_model.dart';
 import 'package:quickstock/features/auth/data/data_source/local_data_source/user_local_data_source.dart';
 import 'package:quickstock/features/auth/data/data_source/remote_data_source/user_remote_data_source.dart';
