@@ -1,343 +1,381 @@
 import 'package:flutter/material.dart';
-import 'package:lucide_icons/lucide_icons.dart';
-import 'package:quickstock/core/common/profile/detail_card.dart';
-import 'package:quickstock/core/common/profile/profile_card.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:quickstock/app/service_locator/service_locator.dart';
+import 'package:quickstock/features/dashboard/presentation/page_content.dart';
+import 'package:quickstock/features/profile/presentation/viewmodel/profile_event.dart';
+import 'package:quickstock/features/profile/presentation/viewmodel/profile_state.dart';
+import 'package:quickstock/features/profile/presentation/viewmodel/profile_view_model.dart';
+import 'package:quickstock/features/profile/presentation/widgets/add_phone_dialog.dart';
+import 'package:quickstock/features/profile/presentation/widgets/profile_header.dart';
+import 'package:quickstock/features/profile/presentation/widgets/profile_section.dart';
+import 'package:quickstock/features/profile/presentation/widgets/update_email_dialog.dart';
+import 'package:quickstock/features/profile/presentation/widgets/update_info_dialog.dart';
+import 'package:quickstock/features/profile/presentation/widgets/update_password_dialog.dart';
 
-class ProfileView extends StatefulWidget {
+class ProfileView extends PageContent {
   const ProfileView({super.key});
+
   @override
-  State<StatefulWidget> createState() => _ProfileViewState();
+  String get title => 'My Profile';
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocProvider<ProfileViewModel>(
+      create:
+          (context) =>
+              serviceLocator<ProfileViewModel>()..add(ProfileFetchStartEvent()),
+      child: const _ProfileViewBody(),
+    );
+  }
 }
 
-class _ProfileViewState extends State<ProfileView> {
-  String? editMode;
+class _ProfileViewBody extends StatelessWidget {
+  const _ProfileViewBody();
+
+  // Helper method for showing confirmation dialogs
+  void _showConfirmationDialog({
+    required BuildContext context,
+    required String title,
+    required String content,
+    required VoidCallback onConfirm,
+  }) {
+    showDialog(
+      context: context,
+      builder:
+          (dialogContext) => AlertDialog(
+            title: Text(title),
+            content: Text(content),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.pop(dialogContext),
+                child: const Text('Cancel'),
+              ),
+              ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Theme.of(context).colorScheme.error,
+                ),
+                onPressed: () {
+                  onConfirm();
+                  Navigator.pop(dialogContext);
+                },
+                child: Text(title.contains('Delete') ? 'Delete' : 'Deactivate'),
+              ),
+            ],
+          ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text("My Profile"),
-        backgroundColor: Colors.white,
-        surfaceTintColor: Colors.white,
-        elevation: 1,
-      ),
+      body: BlocConsumer<ProfileViewModel, ProfileState>(
+        listener: (context, state) {
+          final messenger = ScaffoldMessenger.of(context);
+          final viewModel = context.read<ProfileViewModel>();
 
-      body: ListView(padding: const EdgeInsets.all(16.0), children: [
-        
-      ],
-      ),
-    );
-  }
-
-  // main profile card for image and name
-  Widget buildProfileHeader() {
-    return Container(
-      padding: const EdgeInsets.all(24.0),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: Colors.grey.shade300),
-      ),
-      child: Row(
-        children: [
-          Stack(
-            children: [
-              ClipRRect(
-                borderRadius: BorderRadius.circular(32.0),
-                child: Image.network(
-                  "https://ui-avatars.com/api/?name=John+Doe&background=374151&color=fff&size=128",
-                  width: 100,
-                  height: 100,
-                  fit: BoxFit.cover,
+          if (state.actionError != null) {
+            messenger
+              ..hideCurrentSnackBar()
+              ..showSnackBar(
+                SnackBar(
+                  content: Text(state.actionError!),
+                  backgroundColor: Theme.of(context).colorScheme.error,
                 ),
-              ),
-              Positioned(
-                bottom: 0,
-                right: 0,
-                child: Material(
-                  color: Colors.grey.shade700,
-                  borderRadius: BorderRadius.circular(20),
-                  child: InkWell(
-                    onTap: () {
-                      print("Edit Image tapped");
-                    },
-                    borderRadius: BorderRadius.circular(20),
-                    child: const Padding(
-                      padding: EdgeInsets.all(8),
-                      child: Icon(
-                        LucideIcons.edit2,
-                        color: Colors.white,
-                        size: 18,
+              );
+            // DISPATCH THE EVENT TO CLEAR THE ERROR
+            viewModel.add(ProfileFeedbackMessageClearedEvent());
+          }
+          if (state.successMessage != null) {
+            messenger
+              ..hideCurrentSnackBar()
+              ..showSnackBar(
+                SnackBar(
+                  content: Text(state.successMessage!),
+                  backgroundColor: Colors.green,
+                ),
+              );
+            // DISPATCH THE EVENT TO CLEAR THE SUCCESS MESSAGE
+            viewModel.add(ProfileFeedbackMessageClearedEvent());
+          }
+        },
+        builder: (context, state) {
+          // Handle initial loading and full-page error states
+          if (state.isLoading && state.user == null) {
+            return const Center(child: CircularProgressIndicator());
+          }
+          if (state.errorMessage != null) {
+            return Center(child: Text('Error: ${state.errorMessage}'));
+          }
+          if (state.user == null) {
+            return const Center(child: Text('Could not load profile.'));
+          }
+
+          final user = state.user!;
+
+          // Main UI with a RefreshIndicator and a Stack for the overlay loader
+          return RefreshIndicator(
+            onRefresh: () async {
+              context.read<ProfileViewModel>().add(ProfileFetchStartEvent());
+            },
+            child: Stack(
+              children: [
+                ListView(
+                  padding: const EdgeInsets.all(16.0),
+                  children: [
+                    // 2. ASSEMBLE THE WIDGETS
+                    ProfileHeader(user: user),
+                    const SizedBox(height: 16),
+
+                    // --- Personal Information Card ---
+                    ProfileSectionCard(
+                      title: 'Personal Information',
+                      onEdit:
+                          () => showDialog(
+                            context: context,
+                            builder:
+                                (_) => BlocProvider.value(
+                                  value: context.read<ProfileViewModel>(),
+                                  child: UpdateInfoDialog(user: user),
+                                ),
+                          ),
+                      child: Column(
+                        children: [
+                          _InfoRow(label: 'Full Name', value: user.fullName),
+                        ],
+                      ),
+                    ),
+                    const SizedBox(height: 16),
+
+                    // --- Contact Details Card ---
+                    ProfileSectionCard(
+                      title: 'Contact Details',
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          _InfoRow(
+                            label: 'Email Address',
+                            value: user.email,
+                            onEdit:
+                                () => showDialog(
+                                  context: context,
+                                  builder:
+                                      (_) => BlocProvider.value(
+                                        value: context.read<ProfileViewModel>(),
+                                        child: UpdateEmailDialog(
+                                          currentEmail: user.email,
+                                        ),
+                                      ),
+                                ),
+                          ),
+                          const Divider(),
+                          _InfoRow(
+                            label: 'Primary Phone',
+                            value: user.primaryPhone,
+                          ),
+                          if (user.secondaryPhone != null) ...[
+                            const Divider(),
+                            _InfoRow(
+                              label: 'Secondary Phone',
+                              value: user.secondaryPhone!,
+                              onDelete:
+                                  () => _showConfirmationDialog(
+                                    context: context,
+                                    title: 'Delete Phone Number?',
+                                    content:
+                                        'Are you sure you want to remove this number?',
+                                    onConfirm:
+                                        () => context
+                                            .read<ProfileViewModel>()
+                                            .add(
+                                              ProfilePhoneNumberDeleteEvent(
+                                                phoneNumber:
+                                                    user.secondaryPhone!,
+                                              ),
+                                            ),
+                                  ),
+                            ),
+                          ] else
+                            Padding(
+                              padding: const EdgeInsets.only(top: 8.0),
+                              child: TextButton.icon(
+                                onPressed:
+                                    () => showDialog(
+                                      context: context,
+                                      builder:
+                                          (_) => BlocProvider.value(
+                                            value:
+                                                context
+                                                    .read<ProfileViewModel>(),
+                                            child: const AddPhoneDialog(),
+                                          ),
+                                    ),
+                                icon: const Icon(
+                                  Icons.add_circle_outline,
+                                  size: 20,
+                                ),
+                                label: const Text('Add secondary phone'),
+                              ),
+                            ),
+                        ],
+                      ),
+                    ),
+                    const SizedBox(height: 16),
+
+                    // --- Security Card ---
+                    ProfileSectionCard(
+                      title: 'Security',
+                      editText: 'Change',
+                      onEdit:
+                          () => showDialog(
+                            context: context,
+                            builder:
+                                (_) => BlocProvider.value(
+                                  value: context.read<ProfileViewModel>(),
+                                  child: const UpdatePasswordDialog(),
+                                ),
+                          ),
+                      child: const _InfoRow(
+                        label: 'Password',
+                        value: '••••••••',
+                      ),
+                    ),
+                    const SizedBox(height: 16),
+
+                    // --- Danger Zone Card ---
+                    _DangerZoneCard(
+                      onDeactivate:
+                          () => _showConfirmationDialog(
+                            context: context,
+                            title: 'Deactivate Account?',
+                            content:
+                                'This action is permanent and cannot be undone. Are you sure?',
+                            onConfirm:
+                                () => context.read<ProfileViewModel>().add(
+                                  ProfileAccountDeactivateEvent(),
+                                ),
+                          ),
+                    ),
+                  ],
+                ),
+
+                // Overlay loader for image uploads
+                if (state.isLoading && state.user != null)
+                  Positioned.fill(
+                    child: Container(
+                      color: Colors.black.withOpacity(0.3),
+                      child: const Center(
+                        child: CircularProgressIndicator(color: Colors.white),
                       ),
                     ),
                   ),
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(width: 20),
-          const Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  "John Doe", // Replace with dynamic data
-                  style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-                ),
-                SizedBox(height: 4),
-                Text(
-                  "john.doe@example.com", // Replace with dynamic data
-                  style: TextStyle(fontSize: 16, color: Colors.grey),
-                ),
               ],
             ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  // personal information card
-  Widget buildPersonalInfoCard() {
-    return ProfileCard(
-      title: "Personal Information",
-      child:
-          editMode == 'name'
-              ? buildNameEditForm() // Show form if editMode is 'name'
-              : DetailRow(
-                // Otherwise, show the detail row
-                label: "Full Name",
-                value: "John Doe",
-                onEditClick: () {
-                  setState(() {
-                    editMode = 'name';
-                  });
-                },
-              ),
-    );
-  }
-
-  // form to edit name shown conditionally
-  Widget buildNameEditForm() {
-    return Column(
-      children: [
-        const TextField(
-          decoration: InputDecoration(
-            labelText: 'First Name',
-            border: OutlineInputBorder(),
-          ),
-        ),
-        const SizedBox(height: 12),
-        const TextField(
-          decoration: InputDecoration(
-            labelText: 'Last Name',
-            border: OutlineInputBorder(),
-          ),
-        ),
-        const SizedBox(height: 16),
-        Row(
-          children: [
-            ElevatedButton(onPressed: () {}, child: const Text("Save")),
-            const SizedBox(width: 8),
-            TextButton(
-              onPressed: () {
-                setState(() {
-                  editMode = null;
-                });
-              },
-              child: const Text("Cancel"),
-            ),
-          ],
-        ),
-      ],
-    );
-  }
-
-  // contact details card
-  Widget buildContactDetailsCard() {
-    const String primaryPhone = "123-456-7890";
-    const String? secondaryPhone = null;
-    return ProfileCard(
-      title: "Contact Details",
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          // --- Email Section ---
-          // add an edit form for it
-          // later using the same `editMode == 'email'` logic.
-          DetailRow(
-            label: "Email Address",
-            value: "john.doe@example.com",
-            onEditClick: () {
-              print("Edit email clicked");
-            },
-          ),
-          const Divider(height: 30.0),
-
-          // --- Phone Numbers Section ---
-          const Text(
-            "Phone Numbers",
-            style: TextStyle(
-              color: Colors.grey,
-              fontSize: 14,
-              fontWeight: FontWeight.w500,
-            ),
-          ),
-          const SizedBox(height: 12),
-
-          // Primary Phone Display
-          Row(
-            children: [
-              Text(primaryPhone, style: const TextStyle(fontSize: 16)),
-              const SizedBox(width: 8),
-              Chip(
-                label: const Text("Primary"),
-                labelStyle: const TextStyle(fontSize: 10),
-                backgroundColor: Colors.grey.shade200,
-                padding: EdgeInsets.zero,
-                visualDensity: VisualDensity.compact,
-              ),
-            ],
-          ),
-
-          const SizedBox(height: 12),
-
-          // Secondary Phone Display (Conditional)
-          if (secondaryPhone != null)
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(secondaryPhone, style: const TextStyle(fontSize: 16)),
-                IconButton(
-                  icon: Icon(
-                    LucideIcons.trash2,
-                    color: Colors.red.shade400,
-                    size: 20,
-                  ),
-                  onPressed: () {
-                    // Logic to delete secondary phone
-                    print("Delete secondary phone");
-                  },
-                  splashRadius: 20,
-                ),
-              ],
-            ),
-
-          // Conditional "Add Phone" button OR the edit form
-          if (secondaryPhone == null && editMode != 'phone')
-            TextButton.icon(
-              icon: const Icon(LucideIcons.plusCircle, size: 18),
-              label: const Text("Add secondary phone"),
-              onPressed: () {
-                setState(() {
-                  editMode = 'phone';
-                });
-              },
-              style: TextButton.styleFrom(
-                padding: EdgeInsets.zero,
-                alignment: Alignment.centerLeft,
-              ),
-            )
-          else if (editMode == 'phone')
-            buildPhoneEditForm(),
-        ],
-      ),
-    );
-  }
-
-  Widget buildPhoneEditForm() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        const TextField(
-          keyboardType: TextInputType.phone,
-          decoration: InputDecoration(
-            labelText: 'New Phone Number',
-            hintText: 'Enter 10 digits',
-            border: OutlineInputBorder(),
-          ),
-        ),
-        const SizedBox(height: 16),
-        Row(
-          children: [
-            ElevatedButton(
-              onPressed: () {
-                // Add phone logic here
-                print("Adding phone...");
-                setState(() {
-                  editMode = null;
-                });
-              },
-              child: const Text("Add"),
-            ),
-            const SizedBox(width: 8),
-            TextButton(
-              onPressed: () {
-                setState(() {
-                  editMode = null;
-                });
-              },
-              child: const Text("Cancel"),
-            ),
-          ],
-        ),
-      ],
-    );
-  }
-
-  // security card
-  Widget buildSecurityCard() {
-    return ProfileCard(
-      title: "Security",
-      child: DetailRow(
-        label: "Password",
-        value: "••••••••",
-        onEditClick: () {
-          // would set _editMode to 'password' here
+          );
         },
       ),
     );
   }
+}
 
-  // danger zone for deactivating account
-  Widget buildDangerZone() {
-    return Container(
-      padding: const EdgeInsets.all(16.0),
-      decoration: BoxDecoration(
-        color: Colors.red.shade50,
-        borderRadius: BorderRadius.circular(12.0),
-        border: Border.all(color: Colors.red.shade200),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+// Helper widget for displaying rows inside cards
+class _InfoRow extends StatelessWidget {
+  final String label;
+  final String value;
+  final VoidCallback? onEdit;
+  final VoidCallback? onDelete;
+
+  const _InfoRow({
+    required this.label,
+    required this.value,
+    this.onEdit,
+    this.onDelete,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 8.0),
+      child: Row(
         children: [
-          const Text(
-            "Danger Zone",
-            style: TextStyle(
-              color: Colors.red,
-              fontSize: 20,
-              fontWeight: FontWeight.bold,
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(label, style: Theme.of(context).textTheme.bodySmall),
+                const SizedBox(height: 4),
+                Text(value, style: Theme.of(context).textTheme.bodyMedium),
+              ],
             ),
           ),
-          const SizedBox(height: 8),
-          Text(
-            "Deactivating your account is a permanent action and cannot be undone.",
-            style: TextStyle(color: Colors.red.shade700),
-          ),
-          const SizedBox(height: 16),
-          SizedBox(
-            width: double.infinity,
-            child: ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.red,
-                foregroundColor: Colors.white,
-                padding: const EdgeInsets.symmetric(vertical: 12.0),
+          if (onEdit != null)
+            IconButton(
+              icon: const Icon(Icons.edit_outlined, size: 20),
+              onPressed: onEdit,
+              tooltip: 'Edit',
+            ),
+          if (onDelete != null)
+            IconButton(
+              icon: Icon(
+                Icons.delete_outline,
+                color: Theme.of(context).colorScheme.error,
+                size: 20,
               ),
-              onPressed: () {},
-              child: const Text("Deactivate Account"),
+              onPressed: onDelete,
+              tooltip: 'Delete',
             ),
-          ),
         ],
+      ),
+    );
+  }
+}
+
+// Helper widget for the danger zone card
+class _DangerZoneCard extends StatelessWidget {
+  final VoidCallback onDeactivate;
+  const _DangerZoneCard({required this.onDeactivate});
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    return Card(
+      color: theme.colorScheme.errorContainer.withOpacity(0.3),
+      elevation: 0,
+      shape: RoundedRectangleBorder(
+        side: BorderSide(color: theme.colorScheme.error.withOpacity(0.4)),
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'Danger Zone',
+              style: theme.textTheme.titleLarge?.copyWith(
+                color: theme.colorScheme.error,
+              ),
+            ),
+            const SizedBox(height: 8),
+            Text(
+              'Deactivating your account is a permanent action and cannot be undone.',
+              style: theme.textTheme.bodyMedium?.copyWith(
+                color: theme.colorScheme.onErrorContainer,
+              ),
+            ),
+            const SizedBox(height: 16),
+            SizedBox(
+              width: double.infinity,
+              child: ElevatedButton(
+                onPressed: onDeactivate,
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: theme.colorScheme.error,
+                  foregroundColor: theme.colorScheme.onError,
+                ),
+                child: const Text('Deactivate Account'),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
