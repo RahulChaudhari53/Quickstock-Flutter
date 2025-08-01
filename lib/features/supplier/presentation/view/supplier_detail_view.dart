@@ -17,7 +17,7 @@ class SupplierDetailView extends StatelessWidget {
       create:
           (context) =>
               serviceLocator<SupplierDetailViewModel>()
-                ..add(FetchSupplierDetailsStarted(supplierId: supplierId)),
+                ..add(FetchSupplierDetailsEvent(supplierId: supplierId)),
       child: const _SupplierDetailViewBody(),
     );
   }
