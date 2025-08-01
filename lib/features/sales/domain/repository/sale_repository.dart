@@ -1,5 +1,3 @@
-// lib/features/sales/domain/repository/sale_repository.dart
-
 import 'package:dartz/dartz.dart';
 import 'package:quickstock/core/error/failure.dart';
 import 'package:quickstock/features/sales/domain/entity/sale_entity.dart';
