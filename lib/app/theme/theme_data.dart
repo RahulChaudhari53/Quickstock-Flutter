@@ -1,3 +1,4 @@
+// lib/app/theme
 import 'package:flutter/material.dart';
 
 ThemeData getApplicationTheme() {

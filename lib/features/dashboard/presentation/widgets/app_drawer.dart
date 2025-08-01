@@ -1,5 +1,3 @@
-// lib/features/dashboard/presentation/widgets
-
 import 'package:flutter/material.dart';
 import 'package:quickstock/features/categories/presentation/view/category_view.dart';
 import 'package:quickstock/features/dashboard/presentation/page_content.dart';
@@ -21,7 +19,6 @@ class AppDrawer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     return Drawer(
       child: ListView(
         padding: EdgeInsets.zero,
@@ -63,6 +60,8 @@ class AppDrawer extends StatelessWidget {
           //   selected: currentPage.title == 'Products',
           //   onTap: () => onSelectItem(const ProductView()),
           // ),
+
+          // sales selection
           ListTile(
             leading: const Icon(Icons.point_of_sale_rounded),
             title: const Text('Sales'),

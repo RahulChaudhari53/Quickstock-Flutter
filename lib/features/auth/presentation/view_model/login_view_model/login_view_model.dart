@@ -2,15 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:quickstock/app/service_locator/service_locator.dart';
 import 'package:quickstock/core/common/snackbar/my_snackbar.dart';
-import 'package:quickstock/features/forgot_password/presentation/view/forgot_password_view.dart';
-import 'package:quickstock/features/dashboard/presentation/view/home_view.dart';
-import 'package:quickstock/features/dashboard/presentation/view_model/home_view_model.dart';
 import 'package:quickstock/features/auth/domain/usecase/user_login_usecase.dart';
 import 'package:quickstock/features/auth/domain/usecase/user_register_usecase.dart';
 import 'package:quickstock/features/auth/presentation/view/register_view.dart';
 import 'package:quickstock/features/auth/presentation/view_model/login_view_model/login_event.dart';
 import 'package:quickstock/features/auth/presentation/view_model/login_view_model/login_state.dart';
 import 'package:quickstock/features/auth/presentation/view_model/register_view_model/register_view_model.dart';
+import 'package:quickstock/features/dashboard/presentation/view/dashboard_layout/dashboard_view.dart';
+import 'package:quickstock/features/forgot_password/presentation/view/forgot_password_view.dart';
 
 class LoginViewModel extends Bloc<LoginEvent, LoginState> {
   final UserLoginUsecase _userLoginUsecase;
@@ -31,11 +30,12 @@ class LoginViewModel extends Bloc<LoginEvent, LoginState> {
         Navigator.pushReplacement(
           event.context,
           MaterialPageRoute(
-            builder:
-                (context) => BlocProvider.value(
-                  value: serviceLocator<DashboardViewModel>(),
-                  child: HomeView(),
-                ),
+            // builder:
+            //     (context) => BlocProvider.value(
+            //       value: serviceLocator<DashboardViewModel>(),
+            //       child: DashboardView(),
+            //     ),
+            builder: (context) => const DashboardView(),
           ),
         );
       }
