@@ -21,7 +21,6 @@ class AppDrawer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    const purchasePages = ['Purchase Orders', 'New Purchase Order'];
 
     return Drawer(
       child: ListView(
