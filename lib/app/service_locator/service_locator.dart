@@ -3,6 +3,7 @@ import 'package:get_it/get_it.dart';
 import 'package:quickstock/app/shared_pref/token_shared_pref.dart';
 import 'package:quickstock/core/network/api_service.dart';
 import 'package:quickstock/core/network/hive_service.dart';
+import 'package:quickstock/core/services/proximity_services.dart';
 import 'package:quickstock/features/auth/data/data_source/local_data_source/user_local_data_source.dart';
 import 'package:quickstock/features/auth/data/data_source/remote_data_source/user_remote_data_source.dart';
 import 'package:quickstock/features/auth/data/repository/local_repository/user_local_repository.dart';
@@ -113,6 +114,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 final serviceLocator = GetIt.instance;
 
 Future<void> initDependencies() async {
+  await _initServices();
   await _initHiveService();
   await _initApiService();
   await _initSharedPref();
@@ -128,6 +130,12 @@ Future<void> initDependencies() async {
   await _initStockModule();
   await _initSaleModule();
   await _initProfileModule();
+}
+
+Future<void> _initServices() async {
+  serviceLocator.registerSingleton<ProximityService>(ProximityService());
+
+  serviceLocator<ProximityService>().init();
 }
 
 Future<void> _initHiveService() async {

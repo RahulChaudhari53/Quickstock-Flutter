@@ -34,7 +34,6 @@ class ProfileView extends PageContent {
 class _ProfileViewBody extends StatelessWidget {
   const _ProfileViewBody();
 
-  // Helper method for showing confirmation dialogs
   void _showConfirmationDialog({
     required BuildContext context,
     required String title,
@@ -81,9 +80,9 @@ class _ProfileViewBody extends StatelessWidget {
                       child: LoginView(),
                     ),
               ),
-              (route) => false, // This predicate removes all routes
+              (route) => false,
             );
-            return; // Return to avoid showing snackbars unnecessarily
+            return;
           }
           final messenger = ScaffoldMessenger.of(context);
           final viewModel = context.read<ProfileViewModel>();
@@ -97,7 +96,6 @@ class _ProfileViewBody extends StatelessWidget {
                   backgroundColor: Theme.of(context).colorScheme.error,
                 ),
               );
-            // DISPATCH THE EVENT TO CLEAR THE ERROR
             viewModel.add(ProfileFeedbackMessageClearedEvent());
           }
           if (state.successMessage != null) {
@@ -109,12 +107,10 @@ class _ProfileViewBody extends StatelessWidget {
                   backgroundColor: Colors.green,
                 ),
               );
-            // DISPATCH THE EVENT TO CLEAR THE SUCCESS MESSAGE
             viewModel.add(ProfileFeedbackMessageClearedEvent());
           }
         },
         builder: (context, state) {
-          // Handle initial loading and full-page error states
           if (state.isLoading && state.user == null) {
             return const Center(child: CircularProgressIndicator());
           }
@@ -127,7 +123,6 @@ class _ProfileViewBody extends StatelessWidget {
 
           final user = state.user!;
 
-          // Main UI with a RefreshIndicator and a Stack for the overlay loader
           return RefreshIndicator(
             onRefresh: () async {
               context.read<ProfileViewModel>().add(ProfileFetchStartEvent());
@@ -137,11 +132,9 @@ class _ProfileViewBody extends StatelessWidget {
                 ListView(
                   padding: const EdgeInsets.all(16.0),
                   children: [
-                    // 2. ASSEMBLE THE WIDGETS
                     ProfileHeader(user: user),
                     const SizedBox(height: 16),
 
-                    // --- Personal Information Card ---
                     ProfileSectionCard(
                       title: 'Personal Information',
                       onEdit:
@@ -236,7 +229,6 @@ class _ProfileViewBody extends StatelessWidget {
                     ),
                     const SizedBox(height: 16),
 
-                    // --- Security Card ---
                     ProfileSectionCard(
                       title: 'Security',
                       editText: 'Change',
@@ -256,7 +248,6 @@ class _ProfileViewBody extends StatelessWidget {
                     ),
                     const SizedBox(height: 16),
 
-                    // --- Danger Zone Card ---
                     _DangerZoneCard(
                       onDeactivate:
                           () => _showConfirmationDialog(
@@ -273,7 +264,6 @@ class _ProfileViewBody extends StatelessWidget {
                   ],
                 ),
 
-                // Overlay loader for image uploads
                 if (state.isLoading && state.user != null)
                   Positioned.fill(
                     child: Container(
@@ -292,7 +282,6 @@ class _ProfileViewBody extends StatelessWidget {
   }
 }
 
-// Helper widget for displaying rows inside cards
 class _InfoRow extends StatelessWidget {
   final String label;
   final String value;
@@ -344,7 +333,6 @@ class _InfoRow extends StatelessWidget {
   }
 }
 
-// Helper widget for the danger zone card
 class _DangerZoneCard extends StatelessWidget {
   final VoidCallback onDeactivate;
   const _DangerZoneCard({required this.onDeactivate});

@@ -6,7 +6,6 @@ import 'package:quickstock/core/network/hive_service.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-
   await initDependencies();
 
   await serviceLocator<HiveService>().init();
