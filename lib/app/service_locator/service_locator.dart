@@ -25,6 +25,8 @@ import 'package:quickstock/features/dashboard/data/data_source/remote_data_sourc
 import 'package:quickstock/features/dashboard/data/repository/remote_repository/dashboard_remote_repository_impl.dart';
 import 'package:quickstock/features/dashboard/domain/repository/dashboard_repository.dart';
 import 'package:quickstock/features/dashboard/domain/usecase/get_dashboard_overview_usecase.dart';
+import 'package:quickstock/features/dashboard/domain/usecase/user_logout_usecase.dart';
+import 'package:quickstock/features/dashboard/presentation/view_model/dashboard_layout_viewmodel/dashboard_view_model.dart';
 import 'package:quickstock/features/dashboard/presentation/view_model/home_viewmodel/home_view_model.dart';
 import 'package:quickstock/features/forgot_password/data/data_source/remote_data_source/forgot_password_remote_data_source.dart';
 import 'package:quickstock/features/forgot_password/data/repository/remote_repository/forgot_password_remote_repository.dart';
@@ -181,6 +183,10 @@ Future<void> _initUserModule() async {
     ),
   );
 
+  serviceLocator.registerFactory(
+    () => LogoutUseCase(tokenSharedPref: serviceLocator<TokenSharedPref>()),
+  );
+
   // ============== View Models ==============
   serviceLocator.registerFactory(
     () => RegisterViewModel(serviceLocator<UserRegisterUsecase>()),
@@ -234,7 +240,7 @@ Future<void> _initForgotPasswordModule() async {
   );
 }
 
-// Dashboard Module (Home)
+// Dashboard Module (Home & Main Dashboard Logic)
 Future<void> _initDashboardModule() async {
   // ============== Data Source ==============
   serviceLocator.registerFactory<IDashboardDataSource>(
@@ -256,11 +262,17 @@ Future<void> _initDashboardModule() async {
   );
 
   // ============== ViewModel ==============
+  // For the Home page content
   serviceLocator.registerFactory(
     () => HomeViewModel(
       getDashboardOverviewUsecase:
           serviceLocator<GetDashboardOverviewUsecase>(),
     ),
+  );
+
+  // For the main Dashboard view logic (like logout)
+  serviceLocator.registerFactory(
+    () => DashboardViewModel(logoutUseCase: serviceLocator<LogoutUseCase>()),
   );
 }
 
@@ -503,6 +515,7 @@ Future<void> _initProfileModule() async {
       addPhoneNumberUsecase: serviceLocator<AddPhoneNumberUsecase>(),
       deletePhoneNumberUsecase: serviceLocator<DeletePhoneNumberUsecase>(),
       deactivateAccountUsecase: serviceLocator<DeactivateAccountUsecase>(),
+      logoutUseCase: serviceLocator<LogoutUseCase>(),
     ),
   );
 }

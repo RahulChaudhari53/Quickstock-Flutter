@@ -1,4 +1,5 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:quickstock/features/dashboard/domain/usecase/user_logout_usecase.dart';
 import 'package:quickstock/features/profile/domain/usecase/add_phone_number_usecase.dart';
 import 'package:quickstock/features/profile/domain/usecase/deactivate_account_usecase.dart';
 import 'package:quickstock/features/profile/domain/usecase/delete_phone_number_usecase.dart';
@@ -19,6 +20,7 @@ class ProfileViewModel extends Bloc<ProfileEvent, ProfileState> {
   final AddPhoneNumberUsecase _addPhoneNumberUsecase;
   final DeletePhoneNumberUsecase _deletePhoneNumberUsecase;
   final DeactivateAccountUsecase _deactivateAccountUsecase;
+  final LogoutUseCase _logoutUseCase;
 
   ProfileViewModel({
     required GetProfileUsecase getProfileUsecase,
@@ -29,6 +31,7 @@ class ProfileViewModel extends Bloc<ProfileEvent, ProfileState> {
     required AddPhoneNumberUsecase addPhoneNumberUsecase,
     required DeletePhoneNumberUsecase deletePhoneNumberUsecase,
     required DeactivateAccountUsecase deactivateAccountUsecase,
+    required LogoutUseCase logoutUseCase,
   }) : _getProfileUsecase = getProfileUsecase,
        _updateProfileInfoUsecase = updateProfileInfoUsecase,
        _updatePasswordUsecase = updatePasswordUsecase,
@@ -37,6 +40,7 @@ class ProfileViewModel extends Bloc<ProfileEvent, ProfileState> {
        _addPhoneNumberUsecase = addPhoneNumberUsecase,
        _deletePhoneNumberUsecase = deletePhoneNumberUsecase,
        _deactivateAccountUsecase = deactivateAccountUsecase,
+       _logoutUseCase = logoutUseCase,
        super(const ProfileState.initial()) {
     on<ProfileFetchStartEvent>(_onProfileFetchStarted);
     on<ProfileInfoUpdateEvent>(_onProfileInfoUpdated);
@@ -45,6 +49,7 @@ class ProfileViewModel extends Bloc<ProfileEvent, ProfileState> {
     on<ProfileImageUpdateEvent>(_onProfileImageUpdated);
     on<ProfilePhoneNumberAddEvent>(_onProfilePhoneNumberAdded);
     on<ProfilePhoneNumberDeleteEvent>(_onProfilePhoneNumberDeleted);
+    on<ProfileLogoutEvent>(_onProfileLogout);
     on<ProfileAccountDeactivateEvent>(_onProfileAccountDeactivated);
     on<ProfileFeedbackMessageClearedEvent>(_onProfileFeedbackMessageCleared);
   }
@@ -258,17 +263,27 @@ class ProfileViewModel extends Bloc<ProfileEvent, ProfileState> {
         state.copyWith(isSubmitting: false, actionError: failure.message),
       ),
       (_) {
-        // On successful deactivation, we don't need to update the state further,
-        // as the UI will likely navigate away after logout.
-        // We can emit a final success message.
         emit(
           state.copyWith(
             isSubmitting: false,
-            successMessage:
-                'Account deactivated successfully. You will be logged out.',
+            successMessage: 'Account deactivated. Logging out...',
           ),
         );
+        add(ProfileLogoutEvent());
       },
+    );
+  }
+
+  Future<void> _onProfileLogout(
+    ProfileLogoutEvent event,
+    Emitter<ProfileState> emit,
+  ) async {
+    final result = await _logoutUseCase();
+    result.fold(
+      (failure) => emit(
+        state.copyWith(actionError: "Logout failed: ${failure.message}"),
+      ),
+      (_) => emit(state.copyWith(isLoggedOut: true)),
     );
   }
 }

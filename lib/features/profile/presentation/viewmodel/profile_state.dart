@@ -10,6 +10,7 @@ class ProfileState extends Equatable {
   final String? errorMessage;
   final String? actionError;
   final String? successMessage;
+  final bool isLoggedOut;
 
   const ProfileState({
     this.user,
@@ -18,15 +19,17 @@ class ProfileState extends Equatable {
     this.errorMessage,
     this.actionError,
     this.successMessage,
+    this.isLoggedOut = false,
   });
 
   const ProfileState.initial()
     : user = null,
-      isLoading = true, 
+      isLoading = true,
       isSubmitting = false,
       errorMessage = null,
       actionError = null,
-      successMessage = null;
+      successMessage = null,
+      isLoggedOut = false;
 
   ProfileState copyWith({
     ProfileEntity? user,
@@ -38,6 +41,7 @@ class ProfileState extends Equatable {
     bool clearActionError = false,
     String? successMessage,
     bool clearSuccessMessage = false,
+    bool? isLoggedOut,
   }) {
     return ProfileState(
       user: user ?? this.user,
@@ -48,6 +52,7 @@ class ProfileState extends Equatable {
       actionError: clearActionError ? null : actionError ?? this.actionError,
       successMessage:
           clearSuccessMessage ? null : successMessage ?? this.successMessage,
+      isLoggedOut: isLoggedOut ?? this.isLoggedOut,
     );
   }
 
@@ -59,5 +64,6 @@ class ProfileState extends Equatable {
     errorMessage,
     actionError,
     successMessage,
+    isLoggedOut,
   ];
 }

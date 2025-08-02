@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:quickstock/app/service_locator/service_locator.dart';
+import 'package:quickstock/features/auth/presentation/view/login_view.dart';
+import 'package:quickstock/features/auth/presentation/view_model/login_view_model/login_view_model.dart';
 import 'package:quickstock/features/dashboard/presentation/page_content.dart';
 import 'package:quickstock/features/profile/presentation/viewmodel/profile_event.dart';
 import 'package:quickstock/features/profile/presentation/viewmodel/profile_state.dart';
@@ -70,6 +72,19 @@ class _ProfileViewBody extends StatelessWidget {
     return Scaffold(
       body: BlocConsumer<ProfileViewModel, ProfileState>(
         listener: (context, state) {
+          if (state.isLoggedOut) {
+            Navigator.of(context).pushAndRemoveUntil(
+              MaterialPageRoute(
+                builder:
+                    (context) => BlocProvider.value(
+                      value: serviceLocator<LoginViewModel>(),
+                      child: LoginView(),
+                    ),
+              ),
+              (route) => false, // This predicate removes all routes
+            );
+            return; // Return to avoid showing snackbars unnecessarily
+          }
           final messenger = ScaffoldMessenger.of(context);
           final viewModel = context.read<ProfileViewModel>();
 

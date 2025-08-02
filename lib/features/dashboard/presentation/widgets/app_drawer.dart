@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:quickstock/features/categories/presentation/view/category_view.dart';
 import 'package:quickstock/features/dashboard/presentation/page_content.dart';
 import 'package:quickstock/features/dashboard/presentation/view/home/home_view.dart';
+import 'package:quickstock/features/dashboard/presentation/view_model/dashboard_layout_viewmodel/dashboard_event.dart';
+import 'package:quickstock/features/dashboard/presentation/view_model/dashboard_layout_viewmodel/dashboard_view_model.dart';
 import 'package:quickstock/features/profile/presentation/view/profile_view.dart';
 import 'package:quickstock/features/sales/presentation/view/sales_history_view.dart';
 import 'package:quickstock/features/stock/presentation/view/stock_view.dart';
@@ -101,16 +104,9 @@ class AppDrawer extends StatelessWidget {
             leading: const Icon(Icons.logout_rounded),
             title: const Text('Logout'),
             onTap: () {
-              // IMPORTANT: This should not navigate directly.
-              // It should trigger your authentication BLoC to perform the logout.
-              // The BLoC listener in your main app file will then handle
-              // navigating the user back to the login screen.
-
-              // Example of what you would call:
-              // context.read<AuthBloc>().add(LogoutEvent());
-
-              // For now, we can just close the drawer.
-              Navigator.pop(context);
+              context.read<DashboardViewModel>().add(
+                DashboardLogoutRequested(),
+              );
             },
           ),
         ],

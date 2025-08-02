@@ -78,3 +78,5 @@ class ProfilePhoneNumberDeleteEvent extends ProfileEvent {
 class ProfileAccountDeactivateEvent extends ProfileEvent {}
 
 class ProfileFeedbackMessageClearedEvent extends ProfileEvent {}
+
+class ProfileLogoutEvent extends ProfileEvent {}

@@ -120,31 +120,31 @@ class LoginView extends StatelessWidget {
                       const SizedBox(height: 16),
 
                       Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        mainAxisAlignment: MainAxisAlignment.end,
                         children: [
-                          ValueListenableBuilder<bool>(
-                            valueListenable: rememberMe,
-                            builder: (context, value, _) {
-                              return InkWell(
-                                onTap: () => rememberMe.value = !value,
-                                borderRadius: BorderRadius.circular(8),
-                                child: Row(
-                                  children: [
-                                    Checkbox(
-                                      value: value,
-                                      onChanged:
-                                          (val) =>
-                                              rememberMe.value = val ?? false,
-                                    ),
-                                    Text(
-                                      "Remember Me",
-                                      style: textTheme.labelMedium,
-                                    ),
-                                  ],
-                                ),
-                              );
-                            },
-                          ),
+                          // ValueListenableBuilder<bool>(
+                          //   valueListenable: rememberMe,
+                          //   builder: (context, value, _) {
+                          //     return InkWell(
+                          //       onTap: () => rememberMe.value = !value,
+                          //       borderRadius: BorderRadius.circular(8),
+                          //       child: Row(
+                          //         children: [
+                          //           Checkbox(
+                          //             value: value,
+                          //             onChanged:
+                          //                 (val) =>
+                          //                     rememberMe.value = val ?? false,
+                          //           ),
+                          //           Text(
+                          //             "Remember Me",
+                          //             style: textTheme.labelMedium,
+                          //           ),
+                          //         ],
+                          //       ),
+                          //     );
+                          //   },
+                          // ),
                           TextButton(
                             onPressed: () {
                               context.read<LoginViewModel>().add(
