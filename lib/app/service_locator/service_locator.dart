@@ -7,6 +7,7 @@ import 'package:quickstock/features/auth/data/data_source/local_data_source/user
 import 'package:quickstock/features/auth/data/data_source/remote_data_source/user_remote_data_source.dart';
 import 'package:quickstock/features/auth/data/repository/local_repository/user_local_repository.dart';
 import 'package:quickstock/features/auth/data/repository/remote_repository/user_remote_repository.dart';
+import 'package:quickstock/features/auth/domain/usecase/check_auth_status_usecase.dart';
 import 'package:quickstock/features/auth/domain/usecase/user_login_usecase.dart';
 import 'package:quickstock/features/auth/domain/usecase/user_register_usecase.dart';
 import 'package:quickstock/features/auth/presentation/view_model/login_view_model/login_view_model.dart';
@@ -185,6 +186,12 @@ Future<void> _initUserModule() async {
 
   serviceLocator.registerFactory(
     () => LogoutUseCase(tokenSharedPref: serviceLocator<TokenSharedPref>()),
+  );
+
+  serviceLocator.registerFactory(
+    () => CheckAuthStatusUseCase(
+      tokenSharedPref: serviceLocator<TokenSharedPref>(),
+    ),
   );
 
   // ============== View Models ==============
@@ -522,7 +529,11 @@ Future<void> _initProfileModule() async {
 
 // Splash Module
 Future<void> _initSplashModule() async {
-  serviceLocator.registerFactory(() => SplashViewModel());
+  serviceLocator.registerFactory(
+    () => SplashViewModel(
+      checkAuthStatusUseCase: serviceLocator<CheckAuthStatusUseCase>(),
+    ),
+  );
 }
 
 // Purchase Module
