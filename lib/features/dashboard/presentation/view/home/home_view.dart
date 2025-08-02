@@ -1,6 +1,5 @@
-// lib/features/dashboard/presentation/view/home
-
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:quickstock/app/service_locator/service_locator.dart';
@@ -8,6 +7,7 @@ import 'package:quickstock/features/dashboard/presentation/page_content.dart';
 import 'package:quickstock/features/dashboard/presentation/view_model/home_viewmodel/home_event.dart';
 import 'package:quickstock/features/dashboard/presentation/view_model/home_viewmodel/home_state.dart';
 import 'package:quickstock/features/dashboard/presentation/view_model/home_viewmodel/home_view_model.dart';
+import 'package:shake/shake.dart';
 
 class HomeView extends PageContent {
   const HomeView({super.key});
@@ -26,8 +26,46 @@ class HomeView extends PageContent {
   }
 }
 
-class _DashboardBody extends StatelessWidget {
+// made stateful for shake
+class _DashboardBody extends StatefulWidget {
   const _DashboardBody();
+
+  @override
+  State<_DashboardBody> createState() => _DashboardBodyState();
+}
+
+class _DashboardBodyState extends State<_DashboardBody> {
+  late ShakeDetector _detector;
+
+  @override
+  void initState() {
+    super.initState();
+    _detector = ShakeDetector.autoStart(
+      onPhoneShake: (ShakeEvent event) {
+        final viewModel = context.read<HomeViewModel>();
+
+        if (!viewModel.state.isLoading) {
+          ScaffoldMessenger.of(context)
+            ..hideCurrentSnackBar()
+            ..showSnackBar(
+              const SnackBar(
+                content: Text('Refreshing dashboard...'),
+                duration: Duration(seconds: 2),
+              ),
+            );
+          HapticFeedback.lightImpact();
+          viewModel.add(const FetchHomeEvent());
+        }
+      },
+      shakeThresholdGravity: 1.5,
+    );
+  }
+
+  @override
+  void dispose() {
+    _detector.stopListening();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -65,7 +103,7 @@ class _DashboardBody extends StatelessWidget {
         final overview = state.overview!;
         final currencyFormat = NumberFormat.currency(
           locale: 'ne_NP',
-          // symbol: '\$',
+          // symbol: '\Rs.',
         );
 
         return RefreshIndicator(
@@ -188,7 +226,6 @@ class _StatCard extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              // Text(title, style: theme.textTheme.labelMedium),
               Expanded(child: Text(title, style: theme.textTheme.labelMedium)),
               const SizedBox(width: 8),
               Icon(icon, color: iconColor, size: 20),
