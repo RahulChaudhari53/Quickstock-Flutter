@@ -9,7 +9,7 @@ class SplashViewModel extends Cubit<void> {
   SplashViewModel() : super(null);
 
   Future<void> init(BuildContext context) async {
-    await Future.delayed(const Duration(seconds: 2), () {
+    await Future.delayed(const Duration(seconds: 5), () {
       if (context.mounted) {
         Navigator.pushReplacement(
           context,

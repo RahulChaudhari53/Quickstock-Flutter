@@ -18,9 +18,9 @@ class SplashView extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             Image.asset(
-              'assets/logo/quickstock_logo.png',
-              width: 150,
-              height: 150,
+              'assets/logo/quickstock-logo-figma.png',
+              width: 100,
+              height: 100,
             ),
             const SizedBox(height: 20),
             // const Text(
