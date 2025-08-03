@@ -48,9 +48,20 @@ class SupplierCard extends StatelessWidget {
       (SupplierViewModel bloc) =>
           bloc.state.processingSupplierIds.contains(supplier.id),
     );
+    final borderColor =
+        (theme.inputDecorationTheme.enabledBorder as OutlineInputBorder)
+            .borderSide
+            .color;
+
+    final statusColor =
+        supplier.isActive ? Colors.green.shade600 : Colors.red.shade600;
 
     return Card(
-      elevation: 2,
+      elevation: 1,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(12),
+        side: BorderSide(color: borderColor),
+      ),
       margin: const EdgeInsets.symmetric(vertical: 8),
       clipBehavior:
           Clip.antiAlias, // ensures the overlay respects the card's rounded corners
@@ -73,24 +84,19 @@ class SupplierCard extends StatelessWidget {
                     ),
                     const SizedBox(width: 8),
                     Chip(
-                      label: Text(supplier.isActive ? 'Active' : 'Inactive'),
-                      backgroundColor:
-                          supplier.isActive
-                              ? theme.colorScheme.primary.withAlpha(
-                                (0.15 * 255).round(),
-                              )
-                              : theme.colorScheme.onSurface.withAlpha(
-                                (0.1 * 255).round(),
-                              ),
-                      labelStyle: TextStyle(
-                        color:
-                            supplier.isActive
-                                ? theme.colorScheme.primary
-                                : theme.colorScheme.onSurface.withOpacity(0.7),
-                        fontWeight: FontWeight.w600,
+                      avatar: Icon(
+                        supplier.isActive
+                            ? Icons.check_circle_rounded
+                            : Icons.cancel_rounded,
+                        color: statusColor,
+                        size: 16,
                       ),
+                      label: Text(
+                        supplier.isActive ? 'Active' : 'Inactive',
+                        style: theme.textTheme.labelMedium,
+                      ),
+                      backgroundColor: statusColor.withOpacity(0.1),
                       side: BorderSide.none,
-                      padding: const EdgeInsets.symmetric(horizontal: 8),
                     ),
                   ],
                 ),

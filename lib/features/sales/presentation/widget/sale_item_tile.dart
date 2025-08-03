@@ -9,17 +9,18 @@ class SaleItemTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+
     final formattedUnitPrice = NumberFormat.currency(
-      symbol: '\$',
+      symbol: 'रु',
       decimalDigits: 2,
     ).format(item.unitPrice);
     final formattedTotalPrice = NumberFormat.currency(
-      symbol: '\$',
+      symbol: 'रु',
       decimalDigits: 2,
     ).format(item.totalPrice);
 
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 12.0),
+      padding: const EdgeInsets.all(16.0),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -30,13 +31,15 @@ class SaleItemTile extends StatelessWidget {
                 Text(
                   item.product.name,
                   style: theme.textTheme.titleMedium?.copyWith(
-                    fontWeight: FontWeight.bold,
+                    fontWeight: FontWeight.w500,
                   ),
                 ),
                 const SizedBox(height: 4),
                 Text(
                   'SKU: ${item.product.sku}',
-                  style: theme.textTheme.bodySmall,
+                  style: theme.textTheme.bodySmall?.copyWith(
+                    color: theme.textTheme.bodySmall?.color?.withOpacity(0.7),
+                  ),
                 ),
               ],
             ),
@@ -47,7 +50,9 @@ class SaleItemTile extends StatelessWidget {
             children: [
               Text(
                 '${item.quantity} x $formattedUnitPrice',
-                style: theme.textTheme.bodyMedium,
+                style: theme.textTheme.bodyMedium?.copyWith(
+                  color: theme.textTheme.bodySmall?.color?.withOpacity(0.7),
+                ),
               ),
               const SizedBox(height: 4),
               Text(

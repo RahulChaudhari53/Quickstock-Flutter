@@ -15,6 +15,10 @@ class SaleCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final borderColor =
+        (theme.inputDecorationTheme.enabledBorder as OutlineInputBorder)
+            .borderSide
+            .color;
     final formattedDate = DateFormat('MMM d, yyyy').format(saleItem.saleDate);
     final formattedAmount = NumberFormat.currency(
       symbol: '\$',
@@ -25,14 +29,13 @@ class SaleCard extends StatelessWidget {
       elevation: 1,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(12),
-        side: BorderSide(color: theme.dividerColor),
+        side: BorderSide(color: borderColor),
       ),
       child: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Top Row:
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -52,29 +55,34 @@ class SaleCard extends StatelessWidget {
               ],
             ),
             const SizedBox(height: 12),
-            // Middle Row:
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            Wrap(
+              spacing: 8.0,
+              runSpacing: 4.0,
               children: [
-                _buildInfoChip(
-                  context,
-                  icon: Icons.calendar_today,
-                  label: formattedDate,
+                Chip(
+                  avatar: Icon(Icons.calendar_today, size: 16),
+                  label: Text(formattedDate),
+                  labelStyle: theme.textTheme.labelMedium,
+                  backgroundColor: theme.colorScheme.surfaceContainerHighest,
+                  side: BorderSide.none,
                 ),
-                _buildInfoChip(
-                  context,
-                  icon: Icons.shopping_basket_outlined,
-                  label: '${saleItem.items.length} Items',
+                Chip(
+                  avatar: Icon(Icons.shopping_basket_outlined, size: 16),
+                  label: Text('${saleItem.items.length} Items'),
+                  labelStyle: theme.textTheme.labelMedium,
+                  backgroundColor: theme.colorScheme.surfaceContainerHighest,
+                  side: BorderSide.none,
                 ),
-                _buildInfoChip(
-                  context,
-                  icon: Icons.payment,
-                  label: saleItem.paymentMethod.toUpperCase(),
+                Chip(
+                  avatar: Icon(Icons.payment, size: 16),
+                  label: Text(saleItem.paymentMethod.toUpperCase()),
+                  labelStyle: theme.textTheme.labelMedium,
+                  backgroundColor: theme.colorScheme.surfaceContainerHighest,
+                  side: BorderSide.none,
                 ),
               ],
             ),
             const Divider(height: 24),
-            // Bottom Row: 
             BlocBuilder<SalesHistoryViewModel, SalesHistoryState>(
               builder: (context, state) {
                 final isProcessing = state.processingSaleIds.contains(
@@ -121,21 +129,6 @@ class SaleCard extends StatelessWidget {
           ],
         ),
       ),
-    );
-  }
-
-  Widget _buildInfoChip(
-    BuildContext context, {
-    required IconData icon,
-    required String label,
-  }) {
-    final theme = Theme.of(context);
-    return Row(
-      children: [
-        Icon(icon, size: 16, color: theme.textTheme.bodySmall?.color),
-        const SizedBox(width: 4),
-        Text(label, style: theme.textTheme.bodyMedium),
-      ],
     );
   }
 

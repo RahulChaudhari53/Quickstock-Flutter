@@ -52,11 +52,18 @@ class _SaleDetailContent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final formattedDate = DateFormat(
-      'MMM d, yyyy hh:mm a',
-    ).format(sale.saleDate);
+    final textTheme = theme.textTheme;
+    final colorScheme = theme.colorScheme;
+
+    final borderColor =
+        (theme.inputDecorationTheme.enabledBorder as OutlineInputBorder)
+            .borderSide
+            .color;
+
+    final formattedDate = DateFormat('MMM d, yyyy').format(sale.saleDate);
+    final formattedTime = DateFormat('hh:mm a').format(sale.saleDate);
     final formattedAmount = NumberFormat.currency(
-      symbol: '\$',
+      symbol: 'रु',
       decimalDigits: 2,
     ).format(sale.totalAmount);
 
@@ -65,55 +72,129 @@ class _SaleDetailContent extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Column(
+          Card(
+            elevation: 0, 
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12),
+              side: BorderSide(color: borderColor),
+            ),
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text('INVOICE', style: theme.textTheme.bodySmall),
-                  Text(
-                    sale.invoiceNumber,
-                    style: theme.textTheme.headlineSmall,
-                  ),
-                  const SizedBox(height: 4),
-                  Text(formattedDate, style: theme.textTheme.bodyMedium),
-                ],
-              ),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.end,
-                children: [
-                  Text('TOTAL AMOUNT', style: theme.textTheme.bodySmall),
-                  Text(
+                  _buildInfoColumn(textTheme, 'INVOICE', sale.invoiceNumber),
+                  _buildInfoColumn(
+                    textTheme,
+                    'TOTAL',
                     formattedAmount,
-                    style: theme.textTheme.headlineSmall?.copyWith(
-                      color: theme.primaryColor,
-                    ),
+                    valueColor: colorScheme.primary,
                   ),
                 ],
               ),
-            ],
-          ),
-          const Divider(height: 32),
-          Text('PAYMENT METHOD', style: theme.textTheme.bodySmall),
-          const SizedBox(height: 8),
-          Chip(
-            label: Text(
-              sale.paymentMethod.toUpperCase(),
-              style: theme.textTheme.labelLarge,
-            ),
-            avatar: Icon(
-              sale.paymentMethod == 'cash' ? Icons.money : Icons.credit_card,
             ),
           ),
-          const Divider(height: 32),
+          const SizedBox(height: 16),
+
+          Card(
+            elevation: 0,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12),
+              side: BorderSide(color: borderColor),
+            ),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(
+                vertical: 8.0,
+                horizontal: 16.0,
+              ),
+              child: Column(
+                children: [
+                  _buildDetailRow(
+                    textTheme,
+                    'Payment Method',
+                    sale.paymentMethod.toUpperCase(),
+                  ),
+                  const Divider(),
+                  _buildDetailRow(textTheme, 'Date', formattedDate),
+                  const Divider(),
+                  _buildDetailRow(textTheme, 'Time', formattedTime),
+                ],
+              ),
+            ),
+          ),
+          const SizedBox(height: 24),
+
           Text(
-            'ITEMS SOLD (${sale.items.length})',
-            style: theme.textTheme.titleMedium,
+            'Items Sold (${sale.items.length})',
+            style: textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold),
           ),
           const SizedBox(height: 8),
-          ...sale.items.map((item) => SaleItemTile(item: item)),
+
+          Card(
+            elevation: 0,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12),
+              side: BorderSide(color: borderColor),
+            ),
+            clipBehavior:
+                Clip.antiAlias, 
+            child: Column(
+              children: List.generate(sale.items.length, (index) {
+                final item = sale.items[index];
+                return Column(
+                  children: [
+                    SaleItemTile(item: item),
+                    if (index < sale.items.length - 1)
+                      const Divider(height: 1, indent: 16),
+                  ],
+                );
+              }),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildInfoColumn(
+    TextTheme textTheme,
+    String label,
+    String value, {
+    Color? valueColor,
+  }) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(label, style: textTheme.labelLarge),
+        const SizedBox(height: 4),
+        Text(
+          value,
+          style: textTheme.headlineSmall?.copyWith(
+            fontWeight: FontWeight.bold,
+            color: valueColor,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildDetailRow(TextTheme textTheme, String label, String value) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 12.0),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(
+            label,
+            style: textTheme.bodyLarge?.copyWith(
+              color: textTheme.bodySmall?.color,
+            ),
+          ),
+          Text(
+            value,
+            style: textTheme.bodyLarge?.copyWith(fontWeight: FontWeight.w500),
+          ),
         ],
       ),
     );

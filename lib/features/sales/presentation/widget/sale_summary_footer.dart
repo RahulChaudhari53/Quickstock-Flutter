@@ -20,7 +20,7 @@ class SaleSummaryFooter extends StatelessWidget {
               previous.status != current.status,
       builder: (context, state) {
         final formattedTotal = NumberFormat.currency(
-          symbol: '\$',
+          symbol: 'रु ',
           decimalDigits: 2,
         ).format(state.cartTotal);
 
@@ -28,10 +28,9 @@ class SaleSummaryFooter extends StatelessWidget {
         final isSubmitting = state.status == CreateSaleStatus.submitting;
 
         return Container(
-          padding: const EdgeInsets.all(16.0).copyWith(
-            bottom:
-                16.0 + MediaQuery.of(context).viewPadding.bottom,
-          ),
+          padding: const EdgeInsets.all(
+            16.0,
+          ).copyWith(bottom: 16.0 + MediaQuery.of(context).viewPadding.bottom),
           decoration: BoxDecoration(
             color: theme.cardColor,
             border: Border(
@@ -50,31 +49,46 @@ class SaleSummaryFooter extends StatelessWidget {
             children: [
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text('TOTAL', style: theme.textTheme.bodySmall),
+                      Text('TOTAL', style: theme.textTheme.labelMedium),
                       Text(
                         formattedTotal,
                         style: theme.textTheme.headlineMedium?.copyWith(
                           color: theme.primaryColor,
+                          fontWeight: FontWeight.bold,
                         ),
                       ),
                     ],
                   ),
-                  DropdownButton<String>(
-                    value: state.paymentMethod,
-                    onChanged: (String? newValue) {
-                      if (newValue == null) return;
-                      context.read<CreateSaleViewModel>().add(
-                        PaymentMethodChangedEvent(paymentMethod: newValue),
-                      );
-                    },
-                    items: const [
-                      DropdownMenuItem(value: 'cash', child: Text('Cash')),
-                      DropdownMenuItem(value: 'online', child: Text('Online')),
-                    ],
+                  SizedBox(
+                    width: 150,
+                    child: DropdownButtonFormField<String>(
+                      value: state.paymentMethod,
+                      decoration: const InputDecoration(
+                        labelText: 'Payment',
+                        contentPadding: EdgeInsets.symmetric(
+                          horizontal: 12,
+                          vertical: 8,
+                        ),
+                      ),
+                      onChanged: (String? newValue) {
+                        if (newValue == null) return;
+                        context.read<CreateSaleViewModel>().add(
+                          PaymentMethodChangedEvent(paymentMethod: newValue),
+                        );
+                      },
+                      items: const [
+                        DropdownMenuItem(value: 'cash', child: Text('Cash')),
+                        DropdownMenuItem(
+                          value: 'online',
+                          child: Text('Online'),
+                        ),
+                      ],
+                    ),
                   ),
                 ],
               ),

@@ -4,8 +4,6 @@ import 'package:quickstock/app/service_locator/service_locator.dart';
 import 'package:quickstock/features/dashboard/presentation/page_content.dart';
 import 'package:quickstock/features/product/domain/entity/product_entity.dart';
 import 'package:quickstock/features/product/presentation/view/product_detail_view.dart';
-import 'package:quickstock/features/product/presentation/view/product_form_view.dart';
-import 'package:quickstock/features/product/presentation/view_model/product_form_view_model/product_form_state.dart';
 import 'package:quickstock/features/product/presentation/view_model/product_view_viewmodel/product_event.dart';
 import 'package:quickstock/features/product/presentation/view_model/product_view_viewmodel/product_state.dart';
 import 'package:quickstock/features/product/presentation/view_model/product_view_viewmodel/product_view_model.dart';
@@ -141,7 +139,11 @@ class _ProductBodyState extends State<_ProductBody> {
                         )
                         : const SizedBox.shrink();
                   }
-                  return _ProductListItem(product: state.products[index]);
+                  // return _ProductListItem(product: state.products[index]);
+                  return Padding(
+                    padding: const EdgeInsets.fromLTRB(0.0, 0, 0.0, 12.0),
+                    child: _ProductListItem(product: state.products[index]),
+                  );
                 },
               ),
             );
@@ -189,6 +191,10 @@ class _ProductListItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final borderColor =
+        (theme.inputDecorationTheme.enabledBorder as OutlineInputBorder)
+            .borderSide
+            .color;
     final togglingIds = context.select(
       (ProductViewModel vm) => vm.state.togglingProductIds,
     );
@@ -207,6 +213,11 @@ class _ProductListItem extends StatelessWidget {
 
     return Card(
       margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      elevation: 1,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(12),
+        side: BorderSide(color: borderColor),
+      ),
       child: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
@@ -256,16 +267,31 @@ class _ProductListItem extends StatelessWidget {
             ),
             Text(product.sku, style: theme.textTheme.bodySmall),
             const SizedBox(height: 12),
-            Row(
+            Wrap(
+              spacing: 8.0,
+              runSpacing: 4.0,
               children: [
-                _InfoChip(
-                  label: product.category.name,
-                  icon: Icons.category_outlined,
+                Chip(
+                  avatar: Icon(
+                    Icons.category_outlined,
+                    size: 16,
+                    color: theme.colorScheme.primary,
+                  ),
+                  label: Text(product.category.name),
+                  labelStyle: theme.textTheme.labelMedium,
+                  backgroundColor: theme.colorScheme.primary.withOpacity(0.1),
+                  side: BorderSide.none,
                 ),
-                const SizedBox(width: 8),
-                _InfoChip(
-                  label: product.supplier.name,
-                  icon: Icons.business_center_outlined,
+                Chip(
+                  avatar: Icon(
+                    Icons.business_center_outlined,
+                    size: 16,
+                    color: theme.colorScheme.primary,
+                  ),
+                  label: Text(product.supplier.name),
+                  labelStyle: theme.textTheme.labelMedium,
+                  backgroundColor: theme.colorScheme.primary.withOpacity(0.1),
+                  side: BorderSide.none,
                 ),
               ],
             ),

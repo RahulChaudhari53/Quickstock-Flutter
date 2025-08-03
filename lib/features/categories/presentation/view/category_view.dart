@@ -1,6 +1,6 @@
-// lib/features/categories/presentation/view
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:lucide_icons/lucide_icons.dart';
 import 'package:quickstock/app/service_locator/service_locator.dart';
 import 'package:quickstock/features/categories/domain/entity/category_entity.dart';
 import 'package:quickstock/features/categories/presentation/view_model/category_event.dart';
@@ -164,10 +164,18 @@ class _CategoriesViewBodyState extends State<_CategoriesViewBody> {
                   itemCount: state.categories.length,
                   itemBuilder: (context, index) {
                     final category = state.categories[index];
-                    return _CategoryCard(
-                      category: category,
-                      isProcessing: state.processingCategoryIds.contains(
-                        category.id,
+                    return Padding(
+                      padding: const EdgeInsets.fromLTRB(
+                        16.0,
+                        0,
+                        16.0,
+                        12.0,
+                      ), // Consistent spacing
+                      child: _CategoryCard(
+                        category: category,
+                        isProcessing: state.processingCategoryIds.contains(
+                          category.id,
+                        ),
                       ),
                     );
                   },
@@ -188,7 +196,7 @@ class _CategoriesViewBodyState extends State<_CategoriesViewBody> {
             onPressed: () {
               _showCreateCategoryDialog(context);
             },
-            icon: const Icon(Icons.add),
+            icon: const Icon(LucideIcons.plus),
             label: const Text('Create Category'),
           ),
         );
@@ -233,122 +241,33 @@ class _FilterBar extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
+    final borderColor =
+        (theme.inputDecorationTheme.enabledBorder as OutlineInputBorder)
+            .borderSide
+            .color;
 
     return Padding(
       padding: const EdgeInsets.all(16.0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          TextField(
-            controller: searchController,
-            decoration: InputDecoration(
-              hintText: 'Search by category name...',
-              prefixIcon: Icon(
-                Icons.search,
-                color: colorScheme.onSurfaceVariant,
-              ),
-              filled: true,
-              fillColor: colorScheme.surfaceVariant.withOpacity(0.2),
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(8.0),
-                borderSide: BorderSide.none,
-              ),
-              enabledBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(8.0),
-                borderSide: BorderSide.none,
-              ),
-              focusedBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(8.0),
-                borderSide: BorderSide(color: colorScheme.primary, width: 2.0),
-              ),
-              contentPadding: const EdgeInsets.symmetric(
-                vertical: 14.0,
-                horizontal: 16.0,
-              ),
-            ),
-            style: TextStyle(color: colorScheme.onSurface),
-            onSubmitted: (_) => onApply(),
-          ),
-          const SizedBox(height: 12),
-
           Row(
             children: [
               Expanded(
-                child: DropdownButtonFormField<String>(
-                  value: sortByValue,
-                  onChanged: onSortByChanged,
-                  decoration: InputDecoration(
-                    labelText: 'Sort by',
-                    labelStyle: TextStyle(color: colorScheme.onSurface),
-                    filled: true,
-                    fillColor: colorScheme.surfaceVariant.withOpacity(0.2),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(8.0),
-                      borderSide: BorderSide.none,
-                    ),
-                    enabledBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(8.0),
-                      borderSide: BorderSide.none,
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(8.0),
-                      borderSide: BorderSide(
-                        color: colorScheme.primary,
-                        width: 2.0,
-                      ),
-                    ),
-                    contentPadding: const EdgeInsets.symmetric(
-                      vertical: 14.0,
-                      horizontal: 16.0,
-                    ),
+                child: TextField(
+                  controller: searchController,
+                  decoration: const InputDecoration(
+                    hintText: 'Search by category name...',
+                    prefixIcon: Icon(LucideIcons.search),
                   ),
-                  dropdownColor: colorScheme.surface,
-                  items: [
-                    DropdownMenuItem(
-                      value: 'desc',
-                      child: Text(
-                        'Newest First',
-                        style: TextStyle(color: colorScheme.onSurface),
-                      ),
-                    ),
-                    DropdownMenuItem(
-                      value: 'asc',
-                      child: Text(
-                        'Oldest First',
-                        style: TextStyle(color: colorScheme.onSurface),
-                      ),
-                    ),
-                  ],
-                  iconEnabledColor: colorScheme.onSurfaceVariant,
+                  onSubmitted: (_) => onApply(),
                 ),
               ),
-              const SizedBox(width: 12),
-              ElevatedButton.icon(
-                onPressed: onApply,
-                icon: Icon(Icons.check, color: colorScheme.onPrimary),
-                label: Text(
-                  'Apply',
-                  style: TextStyle(color: colorScheme.onPrimary),
-                ),
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: colorScheme.primary,
-                  foregroundColor: colorScheme.onPrimary,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8.0),
-                  ),
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 24,
-                    vertical: 15,
-                  ),
-                  textStyle: theme.textTheme.labelLarge?.copyWith(
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
+              const SizedBox(width: 16),
+              ElevatedButton(onPressed: onApply, child: const Text('Apply')),
             ],
           ),
-          const SizedBox(height: 16),
-
+          const SizedBox(height: 8),
           Wrap(
             spacing: 8.0,
             runSpacing: 8.0,
@@ -358,6 +277,7 @@ class _FilterBar extends StatelessWidget {
                 selected: isActiveValue == null,
                 onSelected: (_) => onIsActiveChanged(null),
                 selectedColor: colorScheme.primary,
+                showCheckmark: false, // Set to false for a cleaner look
                 labelStyle: TextStyle(
                   color:
                       isActiveValue == null
@@ -367,16 +287,15 @@ class _FilterBar extends StatelessWidget {
                 side:
                     isActiveValue == null
                         ? BorderSide.none
-                        : BorderSide(color: colorScheme.outlineVariant),
-                showCheckmark: true,
-                checkmarkColor: colorScheme.onPrimary,
+                        : BorderSide(color: borderColor),
               ),
-              // active Chip
+              // Active Chip
               ChoiceChip(
                 label: const Text('Active'),
                 selected: isActiveValue == true,
                 onSelected: (_) => onIsActiveChanged(true),
                 selectedColor: colorScheme.primary,
+                showCheckmark: false,
                 labelStyle: TextStyle(
                   color:
                       isActiveValue == true
@@ -386,16 +305,15 @@ class _FilterBar extends StatelessWidget {
                 side:
                     isActiveValue == true
                         ? BorderSide.none
-                        : BorderSide(color: colorScheme.outlineVariant),
-                showCheckmark: true,
-                checkmarkColor: colorScheme.onPrimary,
+                        : BorderSide(color: borderColor),
               ),
-              // inactive Chip
+              // Inactive Chip
               ChoiceChip(
                 label: const Text('Inactive'),
                 selected: isActiveValue == false,
                 onSelected: (_) => onIsActiveChanged(false),
                 selectedColor: colorScheme.primary,
+                showCheckmark: false,
                 labelStyle: TextStyle(
                   color:
                       isActiveValue == false
@@ -405,9 +323,7 @@ class _FilterBar extends StatelessWidget {
                 side:
                     isActiveValue == false
                         ? BorderSide.none
-                        : BorderSide(color: colorScheme.outlineVariant),
-                showCheckmark: true,
-                checkmarkColor: colorScheme.onPrimary,
+                        : BorderSide(color: borderColor),
               ),
             ],
           ),
@@ -425,92 +341,89 @@ class _CategoryCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final textTheme = Theme.of(context).textTheme;
-    final colorScheme = Theme.of(context).colorScheme;
+    final theme = Theme.of(context);
+    final textTheme = theme.textTheme;
+    final colorScheme = theme.colorScheme;
+    final statusColor =
+        category.isActive ? Colors.green.shade600 : Colors.red.shade600;
+    final borderColor =
+        (theme.inputDecorationTheme.enabledBorder as OutlineInputBorder)
+            .borderSide
+            .color;
 
     return Card(
-      margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-      elevation: 2,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+      elevation: 1,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(12),
+        side: BorderSide(color: borderColor),
+      ),
       child: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.end,
           children: [
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Expanded(
-                  child: Text(
-                    category.name,
-                    style: textTheme.titleLarge?.copyWith(
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
+            Chip(
+              label: Text(
+                category.isActive ? 'Active' : 'Inactive',
+                style: textTheme.labelMedium,
+              ),
+              backgroundColor: statusColor.withOpacity(0.1),
+              side: BorderSide.none,
+              avatar: Icon(
+                category.isActive
+                    ? Icons.check_circle_rounded
+                    : Icons.cancel_rounded,
+                color: statusColor,
+                size: 16,
+              ),
+            ),
+
+            const SizedBox(height: 16),
+            Center(
+              child: Text(
+                category.name,
+                style: textTheme.titleLarge?.copyWith(
+                  fontWeight: FontWeight.bold,
                 ),
-                const SizedBox(width: 8),
-                // status badge
-                Chip(
-                  label: Text(category.isActive ? 'Active' : 'Inactive'),
-                  backgroundColor:
+                textAlign: TextAlign.center,
+              ),
+            ),
+
+            const Divider(height: 10),
+            if (isProcessing)
+              const SizedBox(
+                width: 24,
+                height: 24,
+                child: CircularProgressIndicator(strokeWidth: 3),
+              )
+            else
+              TextButton.icon(
+                onPressed: () {
+                  final event =
                       category.isActive
-                          ? colorScheme.primaryContainer
-                          : colorScheme.errorContainer,
-                  labelStyle: textTheme.labelSmall?.copyWith(
+                          ? DeactivateCategoryEvent(category.id)
+                          : ActivateCategoryEvent(category.id);
+                  context.read<CategoryViewModel>().add(event);
+                },
+                icon: Icon(
+                  category.isActive
+                      ? Icons.toggle_off_outlined
+                      : Icons.toggle_on,
+                  color:
+                      category.isActive
+                          ? colorScheme.error
+                          : colorScheme.primary,
+                ),
+                label: Text(
+                  category.isActive ? 'Deactivate' : 'Activate',
+                  style: textTheme.labelLarge?.copyWith(
                     color:
                         category.isActive
-                            ? colorScheme.onPrimaryContainer
-                            : colorScheme.onErrorContainer,
-                    fontWeight: FontWeight.bold,
+                            ? colorScheme.error
+                            : colorScheme.primary,
                   ),
-                  padding: const EdgeInsets.symmetric(horizontal: 8),
-                  visualDensity: VisualDensity.compact,
                 ),
-              ],
-            ),
-            const SizedBox(height: 8),
-            Text(category.description, style: textTheme.bodyMedium),
-            const Divider(height: 32),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                if (isProcessing)
-                  const SizedBox(
-                    width: 24,
-                    height: 24,
-                    child: CircularProgressIndicator(strokeWidth: 3),
-                  )
-                else
-                  TextButton.icon(
-                    onPressed: () {
-                      final event =
-                          category.isActive
-                              ? DeactivateCategoryEvent(category.id)
-                              : ActivateCategoryEvent(category.id);
-                      context.read<CategoryViewModel>().add(event);
-                    },
-                    icon: Icon(
-                      category.isActive
-                          ? Icons.toggle_off_outlined
-                          : Icons.toggle_on,
-                      color:
-                          category.isActive
-                              ? colorScheme.error
-                              : colorScheme.primary,
-                    ),
-                    label: Text(
-                      category.isActive ? 'Deactivate' : 'Activate',
-                      style: textTheme.labelLarge?.copyWith(
-                        color:
-                            category.isActive
-                                ? colorScheme.error
-                                : colorScheme.primary,
-                      ),
-                    ),
-                  ),
-              ],
-            ),
+              ),
           ],
         ),
       ),

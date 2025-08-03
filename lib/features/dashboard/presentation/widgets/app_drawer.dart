@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:lucide_icons/lucide_icons.dart';
 import 'package:quickstock/features/categories/presentation/view/category_view.dart';
 import 'package:quickstock/features/dashboard/presentation/page_content.dart';
 import 'package:quickstock/features/dashboard/presentation/view/home/home_view.dart';
@@ -23,35 +24,51 @@ class AppDrawer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
     return Drawer(
       child: ListView(
         padding: EdgeInsets.zero,
         children: [
-          const DrawerHeader(
+          DrawerHeader(
             decoration: BoxDecoration(color: Colors.deepPurple),
-            child: Text(
-              "QuickStock Menu",
-              style: TextStyle(color: Colors.white, fontSize: 24),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Image.asset(
+                  "assets/logo/quickstock-logo-figma.png",
+                  height: 56,
+                ),
+                const SizedBox(width: 12),
+                Text(
+                  "QuickStock",
+                  style: theme.textTheme.headlineSmall?.copyWith(
+                    color: colorScheme.onSurface,
+                    fontSize: 25,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ],
             ),
           ),
 
           // home
           ListTile(
-            leading: const Icon(Icons.dashboard),
+            leading: const Icon(LucideIcons.layoutDashboard),
             title: const Text('Home'),
             selected: currentPage.title == 'Home',
             onTap: () => onSelectItem(const HomeView()),
           ),
 
           ListTile(
-            leading: const Icon(Icons.dashboard),
+            leading: const Icon(LucideIcons.list),
             title: const Text('Categories'),
             selected: currentPage.title == 'Manage Categories',
             onTap: () => onSelectItem(const CategoriesView()),
           ),
 
           ListTile(
-            leading: const Icon(Icons.shopping_cart),
+            leading: const Icon(LucideIcons.users),
             title: const Text('Suppliers'),
             selected: currentPage.title == 'Manage Suppliers',
             onTap: () => onSelectItem(const SuppliersView()),
@@ -59,7 +76,7 @@ class AppDrawer extends StatelessWidget {
 
           // product selection
           ListTile(
-            leading: const Icon(Icons.inventory_outlined),
+            leading: const Icon(LucideIcons.box),
             title: const Text('Products'),
             selected: currentPage.title == 'Products',
             onTap: () => onSelectItem(const ProductView()),
@@ -67,7 +84,7 @@ class AppDrawer extends StatelessWidget {
 
           // sales selection
           ListTile(
-            leading: const Icon(Icons.point_of_sale_rounded),
+            leading: const Icon(LucideIcons.shoppingCart),
             title: const Text('Sales'),
             selected: currentPage.title == 'Sales History',
             onTap: () => onSelectItem(const SalePage()),
@@ -83,7 +100,7 @@ class AppDrawer extends StatelessWidget {
 
           // stock selection
           ListTile(
-            leading: const Icon(Icons.inventory_2_outlined),
+            leading: const Icon(LucideIcons.warehouse),
             title: const Text('Stock'),
             selected: currentPage.title == 'Stock Overview',
             onTap: () => onSelectItem(const StockView()),
@@ -94,7 +111,7 @@ class AppDrawer extends StatelessWidget {
 
           // Profile
           ListTile(
-            leading: const Icon(Icons.person),
+            leading: const Icon(LucideIcons.userCircle),
             title: Text(const ProfileView().title),
             selected: currentPage.title == const ProfileView().title,
             onTap: () => onSelectItem(const ProfileView()),
@@ -102,7 +119,7 @@ class AppDrawer extends StatelessWidget {
 
           // logout
           ListTile(
-            leading: const Icon(Icons.logout_rounded),
+            leading: Icon(LucideIcons.logOut),
             title: const Text('Logout'),
             onTap: () {
               context.read<DashboardViewModel>().add(

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
+import 'package:lucide_icons/lucide_icons.dart';
 import 'package:quickstock/app/service_locator/service_locator.dart';
 import 'package:quickstock/features/dashboard/presentation/page_content.dart';
 import 'package:quickstock/features/dashboard/presentation/view_model/home_viewmodel/home_event.dart';
@@ -101,10 +102,6 @@ class _DashboardBodyState extends State<_DashboardBody> {
         }
 
         final overview = state.overview!;
-        final currencyFormat = NumberFormat.currency(
-          locale: 'ne_NP',
-          // symbol: '\Rs.',
-        );
 
         return RefreshIndicator(
           onRefresh: () async {
@@ -123,32 +120,34 @@ class _DashboardBodyState extends State<_DashboardBody> {
                       title: 'Total Stock Items',
                       value: overview.totalStockItems.toString(),
                       subtitle: '${overview.activeProducts} distinct products',
-                      icon: Icons.inventory_2_outlined,
+                      icon: LucideIcons.boxes,
                     ),
                     _StatCard(
                       title: 'Inventory Value (Buy)',
-                      value: currencyFormat.format(
-                        overview.inventoryPurchaseValue,
-                      ),
+                      value: NumberFormat.currency(
+                        symbol: 'रु',
+                        decimalDigits: 2,
+                      ).format(overview.inventoryPurchaseValue),
                       subtitle: 'Based on purchase price',
-                      icon: Icons.attach_money_outlined,
+                      icon: LucideIcons.wallet,
                     ),
+                    // 'रु ${currencyFormat.format(overview.inventoryPurchaseValue)}',
                     _StatCard(
                       title: 'Sales Orders',
                       value: overview.totalSalesOrders.toString(),
                       subtitle: 'In the last 30 days',
-                      icon: Icons.shopping_cart_outlined,
+                      icon: LucideIcons.shoppingCart,
                     ),
                     _StatCard(
                       title: 'Active Suppliers',
                       value: overview.activeSuppliers.toString(),
                       subtitle: 'Verified partners',
-                      icon: Icons.people_outline,
+                      icon: LucideIcons.users,
                     ),
                     _StatCard(
                       title: 'Low Stock',
                       value: overview.lowStockCount.toString(),
-                      icon: Icons.warning_amber_rounded,
+                      icon: LucideIcons.alertTriangle,
                       isAlert: true,
                       action: Text(
                         'View Items ->',
@@ -160,7 +159,7 @@ class _DashboardBodyState extends State<_DashboardBody> {
                     _StatCard(
                       title: 'Out of Stock',
                       value: overview.outOfStockCount.toString(),
-                      icon: Icons.cancel_outlined,
+                      icon: LucideIcons.xCircle,
                     ),
                   ],
                 ),
@@ -196,55 +195,56 @@ class _StatCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
-    final isDarkMode = theme.brightness == Brightness.dark;
+    final borderColor =
+        (theme.inputDecorationTheme.enabledBorder as OutlineInputBorder)
+            .borderSide
+            .color;
 
-    final cardColor =
-        isAlert
-            ? isDarkMode
-                ? Colors.red.shade900.withOpacity(0.5)
-                : Colors.red.shade50
-            : theme.cardColor;
+    final cardBorderColor =
+        isAlert ? colorScheme.error.withOpacity(0.5) : borderColor;
     final iconColor =
-        isAlert ? colorScheme.error : theme.textTheme.bodySmall?.color;
-    final valueColor =
-        isAlert ? colorScheme.error : theme.textTheme.displaySmall?.color;
+        isAlert ? colorScheme.error : colorScheme.onSurfaceVariant;
+    final valueColor = isAlert ? colorScheme.error : colorScheme.onSurface;
 
-    return Container(
+    return SizedBox(
       width: MediaQuery.of(context).size.width / 2 - 24,
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: cardColor,
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(
-          color:
-              isAlert ? colorScheme.error.withOpacity(0.3) : theme.dividerColor,
+      child: Card(
+        elevation: 1,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(12),
+          side: BorderSide(color: cardBorderColor),
         ),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.start,
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
             children: [
-              Expanded(child: Text(title, style: theme.textTheme.labelMedium)),
-              const SizedBox(width: 8),
-              Icon(icon, color: iconColor, size: 20),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Expanded(
+                    child: Text(title, style: theme.textTheme.titleSmall),
+                  ),
+                  Icon(icon, color: iconColor, size: 24),
+                ],
+              ),
+              const SizedBox(height: 8),
+              Text(
+                value,
+                style: theme.textTheme.headlineMedium?.copyWith(
+                  color: valueColor,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              if (subtitle != null) ...[
+                const SizedBox(height: 4),
+                Text(subtitle!, style: theme.textTheme.bodySmall),
+              ],
+              if (action != null) ...[const SizedBox(height: 8), action!],
             ],
           ),
-          const SizedBox(height: 8),
-          Text(
-            value,
-            style: theme.textTheme.headlineMedium?.copyWith(
-              color: valueColor,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-          if (subtitle != null) ...[
-            const SizedBox(height: 4),
-            Text(subtitle!, style: theme.textTheme.bodySmall),
-          ],
-          if (action != null) ...[const SizedBox(height: 8), action!],
-        ],
+        ),
       ),
     );
   }
@@ -256,24 +256,35 @@ class _AnalyticsPlaceholderCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    return Container(
-      width: double.infinity,
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: theme.cardColor,
+    final borderColor =
+        (theme.inputDecorationTheme.enabledBorder as OutlineInputBorder)
+            .borderSide
+            .color;
+
+    return Card(
+      elevation: 1,
+      shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: theme.dividerColor),
+        side: BorderSide(color: borderColor),
       ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text('Analytics', style: theme.textTheme.titleLarge),
-          const SizedBox(height: 8),
-          Text(
-            'More detailed charts for sales, purchases, and financial reports will be available here in a future update.',
-            style: theme.textTheme.bodyMedium,
-          ),
-        ],
+      child: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'Analytics',
+              style: theme.textTheme.titleLarge?.copyWith(
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            const SizedBox(height: 8),
+            Text(
+              'More detailed charts for sales, purchases, and financial reports will be available here in a future update.',
+              style: theme.textTheme.bodyMedium,
+            ),
+          ],
+        ),
       ),
     );
   }

@@ -148,10 +148,7 @@ class _ProductDetailsContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final currencyFormat = NumberFormat.currency(
-      locale: 'ne_NP',
-      symbol: 'NPR ',
-    );
+    final currencyFormat = NumberFormat.currency(locale: 'ne_NP', symbol: 'रु');
 
     return SingleChildScrollView(
       padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 24.0),
@@ -184,13 +181,15 @@ class _ProductDetailsContent extends StatelessWidget {
 
           _DetailCard(
             title: 'Selling Price',
-            value: currencyFormat.format(product.sellingPrice),
+            // value: currencyFormat.format(product.sellingPrice),
+            value: 'रु ${product.sellingPrice}',
             icon: Icons.sell_outlined,
           ),
           const SizedBox(height: 16),
           _DetailCard(
             title: 'Purchase Price',
-            value: currencyFormat.format(product.purchasePrice),
+            // value: currencyFormat.format(product.purchasePrice),
+            value: 'रु ${product.purchasePrice}',
             icon: Icons.shopping_bag_outlined,
           ),
           const SizedBox(height: 16),

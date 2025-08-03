@@ -14,7 +14,7 @@ class CartItemTile extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final formattedTotalPrice = NumberFormat.currency(
-      symbol: '\$',
+      symbol: 'रु ',
       decimalDigits: 2,
     ).format(cartItem.totalPrice);
 

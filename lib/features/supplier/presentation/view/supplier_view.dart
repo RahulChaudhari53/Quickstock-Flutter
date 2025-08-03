@@ -97,90 +97,12 @@ class SuppliersViewBodyState extends State<_SuppliersViewBody> {
     );
   }
 
-  // Widget buildFilterBar() {
-  //   return Column(
-  //     children: [
-  //       TextField(
-  //         controller: searchController,
-  //         decoration: const InputDecoration(
-  //           hintText: 'Search by name, email, or phone...',
-  //           prefixIcon: Icon(Icons.search),
-  //         ),
-  //         onSubmitted: (_) => applyFilters(),
-  //       ),
-  //       const SizedBox(height: 12),
-  //       Row(
-  //         children: [
-  //           Expanded(
-  //             flex: 2,
-  //             child: DropdownButtonFormField<String>(
-  //               value: '$sortByValue:$sortOrderValue',
-  //               decoration: const InputDecoration(labelText: 'Sort By'),
-  //               items: const [
-  //                 DropdownMenuItem(
-  //                   value: 'createdAt:desc',
-  //                   child: Text('Newest First'),
-  //                 ),
-  //                 DropdownMenuItem(
-  //                   value: 'createdAt:asc',
-  //                   child: Text('Oldest First'),
-  //                 ),
-  //                 DropdownMenuItem(
-  //                   value: 'name:asc',
-  //                   child: Text('Name (A-Z)'),
-  //                 ),
-  //                 DropdownMenuItem(
-  //                   value: 'name:desc',
-  //                   child: Text('Name (Z-A)'),
-  //                 ),
-  //               ],
-  //               onChanged: (value) {
-  //                 if (value == null) return;
-  //                 final parts = value.split(':');
-  //                 setState(() {
-  //                   sortByValue = parts[0];
-  //                   sortOrderValue = parts[1];
-  //                 });
-  //               },
-  //             ),
-  //           ),
-  //           const SizedBox(width: 12),
-  //           Expanded(
-  //             flex: 2,
-  //             child: DropdownButtonFormField<bool?>(
-  //               value: isActiveValue,
-  //               decoration: const InputDecoration(labelText: 'Status'),
-  //               items: const [
-  //                 DropdownMenuItem(value: null, child: Text('All')),
-  //                 DropdownMenuItem(value: true, child: Text('Active')),
-  //                 DropdownMenuItem(value: false, child: Text('Inactive')),
-  //               ],
-  //               onChanged: (value) {
-  //                 setState(() {
-  //                   isActiveValue = value;
-  //                 });
-  //               },
-  //             ),
-  //           ),
-  //           const SizedBox(width: 12),
-  //           Expanded(
-  //             flex: 1,
-  //             child: ElevatedButton(
-  //               onPressed: applyFilters,
-  //               child: const Text('Apply'),
-  //             ),
-  //           ),
-  //         ],
-  //       ),
-  //     ],
-  //   );
-  // }
-
-  // In lib/features/suppliers/presentation/view/supplier_view.dart
-  // Inside the __SuppliersViewBodyState class
-
   Widget buildFilterBar() {
     final theme = Theme.of(context);
+    final borderColor =
+        (theme.inputDecorationTheme.enabledBorder as OutlineInputBorder)
+            .borderSide
+            .color;
     final List<({String label, bool? value})> statusChoices = [
       (label: 'All', value: null),
       (label: 'Active', value: true),
@@ -265,7 +187,7 @@ class SuppliersViewBodyState extends State<_SuppliersViewBody> {
                       });
                     }
                   },
-                  showCheckmark: true,
+                  showCheckmark: false,
                   selectedColor: theme.colorScheme.primary,
                   labelStyle: TextStyle(
                     color:
@@ -276,7 +198,7 @@ class SuppliersViewBodyState extends State<_SuppliersViewBody> {
                   side:
                       isSelected
                           ? BorderSide.none
-                          : BorderSide(color: theme.dividerColor),
+                          : BorderSide(color: borderColor),
                 );
               }).toList(),
         ),
@@ -332,7 +254,11 @@ class SuppliersViewBodyState extends State<_SuppliersViewBody> {
                 );
               }
               final supplier = state.suppliers[index];
-              return SupplierCard(supplier: supplier);
+
+              return Padding(
+                padding: const EdgeInsets.only(bottom: 12.0),
+                child: SupplierCard(supplier: supplier),
+              );
             },
           ),
         );

@@ -134,13 +134,13 @@ class _SupplierDetailsContent extends StatelessWidget {
                 value: '${supplier.createdAt.toLocal()}'.split(' ')[0],
               ),
               const SizedBox(height: 24),
-              Center(
-                child: TextButton.icon(
-                  onPressed: () => Navigator.pop(context),
-                  icon: const Icon(Icons.arrow_back),
-                  label: const Text('Back to Supplier List'),
-                ),
-              ),
+              // Center(
+              //   child: TextButton.icon(
+              //     onPressed: () => Navigator.pop(context),
+              //     icon: const Icon(Icons.arrow_back),
+              //     label: const Text('Back to Supplier List'),
+              //   ),
+              // ),
             ],
           ),
         ),

@@ -46,6 +46,12 @@ class _SaleFilterBarState extends State<SaleFilterBar> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
+    final borderColor =
+        (theme.inputDecorationTheme.enabledBorder as OutlineInputBorder)
+            .borderSide
+            .color;
     return Column(
       children: [
         Row(
@@ -68,10 +74,9 @@ class _SaleFilterBarState extends State<SaleFilterBar> {
         ),
         const SizedBox(height: 8),
         Wrap(
-          spacing: 8.0, 
+          spacing: 8.0,
           runSpacing: 4.0,
-          crossAxisAlignment:
-              WrapCrossAlignment.center, 
+          crossAxisAlignment: WrapCrossAlignment.center,
           children: [
             ChoiceChip(
               label: const Text('All'),
@@ -79,6 +84,18 @@ class _SaleFilterBarState extends State<SaleFilterBar> {
               onSelected: (selected) {
                 if (selected) setState(() => _paymentMethod = '');
               },
+              selectedColor: colorScheme.primary,
+              showCheckmark: false,
+              labelStyle: TextStyle(
+                color:
+                    _paymentMethod.isEmpty
+                        ? colorScheme.onPrimary
+                        : colorScheme.onSurface,
+              ),
+              side:
+                  _paymentMethod.isEmpty
+                      ? BorderSide.none
+                      : BorderSide(color: borderColor),
             ),
             ChoiceChip(
               label: const Text('Cash'),
@@ -86,6 +103,18 @@ class _SaleFilterBarState extends State<SaleFilterBar> {
               onSelected: (selected) {
                 if (selected) setState(() => _paymentMethod = 'cash');
               },
+              selectedColor: colorScheme.primary,
+              showCheckmark: false,
+              labelStyle: TextStyle(
+                color:
+                    _paymentMethod == 'cash'
+                        ? colorScheme.onPrimary
+                        : colorScheme.onSurface,
+              ),
+              side:
+                  _paymentMethod == 'cash'
+                      ? BorderSide.none
+                      : BorderSide(color: borderColor),
             ),
             ChoiceChip(
               label: const Text('Online'),
@@ -93,10 +122,26 @@ class _SaleFilterBarState extends State<SaleFilterBar> {
               onSelected: (selected) {
                 if (selected) setState(() => _paymentMethod = 'online');
               },
+              selectedColor: colorScheme.primary,
+              showCheckmark: false,
+              labelStyle: TextStyle(
+                color:
+                    _paymentMethod == 'online'
+                        ? colorScheme.onPrimary
+                        : colorScheme.onSurface,
+              ),
+              side:
+                  _paymentMethod == 'online'
+                      ? BorderSide.none
+                      : BorderSide(color: borderColor),
             ),
             const SizedBox(width: 16),
-            DropdownButton<String>(
+            DropdownButtonFormField<String>(
               value: '$_sortBy:$_sortOrder',
+              decoration: const InputDecoration(
+                labelText: 'Sort by',
+                // It will automatically use the default border from your theme
+              ),
               onChanged: (String? newValue) {
                 if (newValue == null) return;
                 setState(() {

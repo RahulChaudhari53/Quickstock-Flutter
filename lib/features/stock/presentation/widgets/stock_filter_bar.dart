@@ -36,6 +36,13 @@ class _StockFilterBarState extends State<StockFilterBar> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
+    final borderColor =
+        (theme.inputDecorationTheme.enabledBorder as OutlineInputBorder)
+            .borderSide
+            .color;
+
     return Column(
       children: [
         Row(
@@ -66,6 +73,18 @@ class _StockFilterBarState extends State<StockFilterBar> {
               onSelected: (selected) {
                 if (selected) setState(() => _selectedStatus = '');
               },
+              selectedColor: colorScheme.primary,
+              showCheckmark: false,
+              labelStyle: TextStyle(
+                color:
+                    _selectedStatus.isEmpty
+                        ? colorScheme.onPrimary
+                        : colorScheme.onSurface,
+              ),
+              side:
+                  _selectedStatus.isEmpty
+                      ? BorderSide.none
+                      : BorderSide(color: borderColor),
             ),
             ChoiceChip(
               label: const Text('Low Stock'),
@@ -73,6 +92,18 @@ class _StockFilterBarState extends State<StockFilterBar> {
               onSelected: (selected) {
                 if (selected) setState(() => _selectedStatus = 'low_stock');
               },
+              selectedColor: colorScheme.primary,
+              showCheckmark: false,
+              labelStyle: TextStyle(
+                color:
+                    _selectedStatus == 'low_stock'
+                        ? colorScheme.onPrimary
+                        : colorScheme.onSurface,
+              ),
+              side:
+                  _selectedStatus == 'low_stock'
+                      ? BorderSide.none
+                      : BorderSide(color: borderColor),
             ),
             ChoiceChip(
               label: const Text('Out of Stock'),
@@ -80,6 +111,18 @@ class _StockFilterBarState extends State<StockFilterBar> {
               onSelected: (selected) {
                 if (selected) setState(() => _selectedStatus = 'out_of_stock');
               },
+              selectedColor: colorScheme.primary,
+              showCheckmark: false,
+              labelStyle: TextStyle(
+                color:
+                    _selectedStatus == 'out_of_stock'
+                        ? colorScheme.onPrimary
+                        : colorScheme.onSurface,
+              ),
+              side:
+                  _selectedStatus == 'out_of_stock'
+                      ? BorderSide.none
+                      : BorderSide(color: borderColor),
             ),
           ],
         ),
