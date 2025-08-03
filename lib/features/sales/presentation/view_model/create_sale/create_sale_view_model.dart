@@ -34,7 +34,7 @@ class CreateSaleViewModel extends Bloc<CreateSaleEvent, CreateSaleState> {
     emit(state.copyWith(status: CreateSaleStatus.loadingProducts));
 
     // Make one single call with a limit high enough to get all products
-    final params = GetAllProductsParams(page: 1, limit: 1000);
+    final params = GetAllProductsParams(page: 1, limit: 1000, isActive: true);
     final result = await _getAllProductsUsecase.call(params);
 
     result.fold(
