@@ -57,16 +57,16 @@ class _ProductDetailBody extends StatelessWidget {
         return Scaffold(
           appBar: AppBar(
             title: Text(product?.name ?? 'Product Details'),
-            actions: [
-              if (product != null)
-                Padding(
-                  padding: const EdgeInsets.only(right: 8.0),
-                  child: _ActivateDeactivateButton(
-                    product: product,
-                    isSubmitting: state.isSubmitting,
-                  ),
-                ),
-            ],
+            // actions: [
+            //   if (product != null)
+            //     Padding(
+            //       padding: const EdgeInsets.only(right: 8.0),
+            //       child: _ActivateDeactivateButton(
+            //         product: product,
+            //         isSubmitting: state.isSubmitting,
+            //       ),
+            //     ),
+            // ],
           ),
           body: Builder(
             builder: (context) {
@@ -85,14 +85,14 @@ class _ProductDetailBody extends StatelessWidget {
                         onPressed:
                             () => context.read<ProductDetailViewModel>().add(
                               FetchProductDetails(state.product!.id),
-                            ), // Assuming product is not null here
+                            ),
                         child: const Text('Retry'),
                       ),
                     ],
                   ),
                 );
               }
-              return _ProductDetailsContent(product: product);
+              return _ProductDetailsContent(product: product, context: context);
             },
           ),
         );
@@ -101,80 +101,79 @@ class _ProductDetailBody extends StatelessWidget {
   }
 }
 
-class _ActivateDeactivateButton extends StatelessWidget {
-  final ProductEntity product;
-  final bool isSubmitting;
+// class _ActivateDeactivateButton extends StatelessWidget {
+//   final ProductEntity product;
+//   final bool isSubmitting;
 
-  const _ActivateDeactivateButton({
-    required this.product,
-    required this.isSubmitting,
-  });
+//   const _ActivateDeactivateButton({
+//     required this.product,
+//     required this.isSubmitting,
+//   });
 
-  @override
-  Widget build(BuildContext context) {
-    final bool isActive = product.isActive;
-    return TextButton(
-      onPressed:
-          isSubmitting
-              ? null
-              : () {
-                if (isActive) {
-                  context.read<ProductDetailViewModel>().add(
-                    DeactivateProductRequested(product.id),
-                  );
-                } else {
-                  context.read<ProductDetailViewModel>().add(
-                    ActivateProductRequested(product.id),
-                  );
-                }
-              },
-      child:
-          isSubmitting
-              ? const SizedBox(
-                width: 20,
-                height: 20,
-                child: CircularProgressIndicator(),
-              )
-              : Text(isActive ? 'Deactivate' : 'Activate'),
-    );
-  }
-}
+//   @override
+//   Widget build(BuildContext context) {
+//     final bool isActive = product.isActive;
+//     return TextButton(
+//       onPressed:
+//           isSubmitting
+//               ? null
+//               : () {
+//                 if (isActive) {
+//                   context.read<ProductDetailViewModel>().add(
+//                     DeactivateProductRequested(product.id),
+//                   );
+//                 } else {
+//                   context.read<ProductDetailViewModel>().add(
+//                     ActivateProductRequested(product.id),
+//                   );
+//                 }
+//               },
+//       child:
+//           isSubmitting
+//               ? const SizedBox(
+//                 width: 20,
+//                 height: 20,
+//                 child: CircularProgressIndicator(),
+//               )
+//               : Text(isActive ? 'Deactivate' : 'Activate'),
+//     );
+//   }
+// }
 
 class _ProductDetailsContent extends StatelessWidget {
   final ProductEntity product;
-  const _ProductDetailsContent({required this.product});
+  final BuildContext context;
+
+  const _ProductDetailsContent({required this.product, required this.context});
 
   @override
   Widget build(BuildContext context) {
     final currencyFormat = NumberFormat.currency(
       locale: 'ne_NP',
-    ); // , symbol: '\$'
+      symbol: 'NPR ',
+    );
 
     return SingleChildScrollView(
-      padding: const EdgeInsets.all(16.0),
+      padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 24.0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          _DetailCard(
+          _HeaderCard(
             title: 'Product Name & SKU',
-            value: product.name,
-            subtitle: product.sku,
-            icon: Icons.label_important_outline,
+            name: product.name,
+            sku: product.sku,
+            icon: Icons.drive_file_rename_outline,
           ),
-          if (product.description != null && product.description!.isNotEmpty)
-            _DetailCard(
-              title: 'Description',
-              value: product.description!,
-              icon: Icons.description_outlined,
-            ),
           const SizedBox(height: 16),
+
           Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Expanded(
                 child: _DetailCard(
                   title: 'Category',
                   value: product.category.name,
-                  icon: Icons.category_outlined,
+                  icon: Icons.widgets_outlined,
                 ),
               ),
               const SizedBox(width: 16),
@@ -182,17 +181,20 @@ class _ProductDetailsContent extends StatelessWidget {
             ],
           ),
           const SizedBox(height: 16),
+
           _DetailCard(
             title: 'Selling Price',
             value: currencyFormat.format(product.sellingPrice),
             icon: Icons.sell_outlined,
           ),
+          const SizedBox(height: 16),
           _DetailCard(
             title: 'Purchase Price',
             value: currencyFormat.format(product.purchasePrice),
             icon: Icons.shopping_bag_outlined,
           ),
           const SizedBox(height: 16),
+
           Row(
             children: [
               Expanded(
@@ -212,17 +214,72 @@ class _ProductDetailsContent extends StatelessWidget {
               ),
             ],
           ),
-          _DetailCard(
-            title: 'Status',
-            value: product.isActive ? 'Active' : 'Inactive',
-            icon:
-                product.isActive
-                    ? Icons.check_circle_outline
-                    : Icons.cancel_outlined,
-            valueColor:
-                product.isActive
-                    ? Colors.green
-                    : Theme.of(context).colorScheme.error,
+          const SizedBox(height: 16),
+
+          if (product.description != null &&
+              product.description!.isNotEmpty) ...[
+            _DetailCard(
+              title: 'Description',
+              value: product.description!,
+              icon: Icons.description_outlined,
+            ),
+            const SizedBox(height: 16),
+          ],
+
+          _StatusCard(isActive: product.isActive, context: context),
+        ],
+      ),
+    );
+  }
+}
+
+class _HeaderCard extends StatelessWidget {
+  final String title;
+  final String name;
+  final String sku;
+  final IconData icon;
+
+  const _HeaderCard({
+    required this.title,
+    required this.name,
+    required this.sku,
+    required this.icon,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    return Container(
+      padding: const EdgeInsets.all(16.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Icon(icon, size: 14, color: theme.colorScheme.onSurfaceVariant),
+              const SizedBox(width: 8),
+              Text(
+                title,
+                style: theme.textTheme.labelLarge?.copyWith(
+                  color: theme.colorScheme.onSurfaceVariant,
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 8),
+          Text(
+            name,
+            style: theme.textTheme.displaySmall?.copyWith(
+              fontWeight: FontWeight.bold,
+              color: theme.colorScheme.onSurface,
+            ),
+          ),
+          const SizedBox(height: 4),
+          Text(
+            sku,
+            style: theme.textTheme.titleMedium?.copyWith(
+              color: theme.colorScheme.onSurfaceVariant,
+            ),
           ),
         ],
       ),
@@ -233,48 +290,54 @@ class _ProductDetailsContent extends StatelessWidget {
 class _DetailCard extends StatelessWidget {
   final String title;
   final String value;
-  final String? subtitle;
   final IconData icon;
-  final Color? valueColor;
 
   const _DetailCard({
     required this.title,
     required this.value,
     required this.icon,
-    this.subtitle,
-    this.valueColor,
   });
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    return Card(
-      elevation: 0,
-      color: theme.colorScheme.surfaceVariant.withOpacity(0.3),
-      child: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              children: [
-                Icon(icon, size: 16, color: theme.colorScheme.onSurfaceVariant),
-                const SizedBox(width: 8),
-                Text(title, style: theme.textTheme.labelMedium),
-              ],
-            ),
-            const SizedBox(height: 8),
-            Text(
-              value,
-              style: theme.textTheme.titleLarge?.copyWith(
-                fontWeight: FontWeight.bold,
-                color: valueColor,
+    return Container(
+      padding: const EdgeInsets.all(16.0),
+      decoration: BoxDecoration(
+        color: theme.colorScheme.surface,
+        borderRadius: BorderRadius.circular(12),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.5),
+            blurRadius: 10,
+            offset: const Offset(0, 4),
+          ),
+        ],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Icon(icon, size: 14, color: theme.colorScheme.onSurfaceVariant),
+              const SizedBox(width: 8),
+              Text(
+                title,
+                style: theme.textTheme.labelMedium?.copyWith(
+                  color: theme.colorScheme.onSurfaceVariant,
+                ),
               ),
+            ],
+          ),
+          const SizedBox(height: 8),
+          Text(
+            value,
+            style: theme.textTheme.headlineSmall?.copyWith(
+              fontWeight: FontWeight.bold,
+              color: theme.colorScheme.onSurface,
             ),
-            if (subtitle != null)
-              Text(subtitle!, style: theme.textTheme.bodySmall),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
@@ -287,38 +350,94 @@ class _SupplierDetailCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    return Card(
-      elevation: 0,
-      color: theme.colorScheme.surfaceVariant.withOpacity(0.3),
-      child: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              children: [
-                Icon(
-                  Icons.business_center_outlined,
-                  size: 16,
-                  color: theme.colorScheme.onSurfaceVariant,
-                ),
-                const SizedBox(width: 8),
-                Text('Supplier', style: theme.textTheme.labelMedium),
-              ],
-            ),
-            const SizedBox(height: 8),
-            Text(
-              supplier.name,
-              style: theme.textTheme.titleMedium?.copyWith(
-                fontWeight: FontWeight.bold,
+    return Container(
+      padding: const EdgeInsets.all(16.0),
+      decoration: BoxDecoration(
+        color: theme.colorScheme.surfaceVariant.withOpacity(0.3),
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Icon(
+                Icons.storefront_outlined,
+                size: 14,
+                color: theme.colorScheme.onSurfaceVariant,
               ),
+              const SizedBox(width: 8),
+              Text('Supplier', style: theme.textTheme.labelMedium),
+            ],
+          ),
+          const SizedBox(height: 8),
+          Text(
+            supplier.name,
+            style: theme.textTheme.titleLarge?.copyWith(
+              fontWeight: FontWeight.bold,
             ),
-            if (supplier.phone != null)
-              Text(supplier.phone!, style: theme.textTheme.bodySmall),
-            if (supplier.email != null)
-              Text(supplier.email!, style: theme.textTheme.bodySmall),
-          ],
-        ),
+            maxLines: 2,
+            overflow: TextOverflow.ellipsis,
+          ),
+          const SizedBox(height: 4),
+          if (supplier.phone != null)
+            Text(supplier.phone!, style: theme.textTheme.bodySmall),
+          if (supplier.email != null)
+            Text(supplier.email!, style: theme.textTheme.bodySmall),
+        ],
+      ),
+    );
+  }
+}
+
+class _StatusCard extends StatelessWidget {
+  final bool isActive;
+  final BuildContext context;
+
+  const _StatusCard({required this.isActive, required this.context});
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final color = isActive ? Colors.green : theme.colorScheme.error;
+    final icon = isActive ? Icons.check_circle_outline : Icons.cancel_outlined;
+    final text = isActive ? 'Active' : 'Inactive';
+
+    return Container(
+      padding: const EdgeInsets.all(16.0),
+      decoration: BoxDecoration(
+        color: color.withOpacity(0.1),
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Icon(
+                Icons.info_outline,
+                size: 14,
+                color: theme.colorScheme.onSurfaceVariant,
+              ),
+              const SizedBox(width: 8),
+              Text('Status', style: theme.textTheme.labelMedium),
+            ],
+          ),
+          const SizedBox(height: 8),
+          Row(
+            children: [
+              Icon(icon, color: color),
+              const SizedBox(width: 8),
+              Text(
+                text,
+                style: theme.textTheme.headlineSmall?.copyWith(
+                  fontWeight: FontWeight.bold,
+                  color: color,
+                ),
+              ),
+            ],
+          ),
+        ],
       ),
     );
   }

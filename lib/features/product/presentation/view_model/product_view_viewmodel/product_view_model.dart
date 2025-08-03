@@ -30,7 +30,7 @@ class ProductViewModel extends Bloc<ProductEvent, ProductState> {
     Emitter<ProductState> emit,
   ) async {
     final int nextPage =
-        event.isRefresh ? 1 : state.pagination?.currentPage ?? 1;
+        event.isRefresh ? 1 : (state.pagination?.currentPage ?? 0) + 1;
 
     if (nextPage == 1) {
       emit(
@@ -56,7 +56,7 @@ class ProductViewModel extends Bloc<ProductEvent, ProductState> {
         categoryId: event.categoryId,
         supplierId: event.supplierId,
         stockStatus: event.stockStatus,
-        isActive: true,
+        isActive: null,
       ),
     );
 

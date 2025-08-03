@@ -68,16 +68,16 @@ class _ProductBodyState extends State<_ProductBody> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Navigator.of(context).push(
-            MaterialPageRoute(
-              builder: (_) => const ProductFormView(mode: FormMode.create),
-            ),
-          );
-        },
-        child: const Icon(Icons.add),
-      ),
+      // floatingActionButton: FloatingActionButton(
+      //   onPressed: () {
+      //     Navigator.of(context).push(
+      //       MaterialPageRoute(
+      //         builder: (_) => const ProductFormView(mode: FormMode.create),
+      //       ),
+      //     );
+      //   },
+      //   child: const Icon(Icons.add),
+      // ),
       body: BlocListener<ProductViewModel, ProductState>(
         listener: (context, state) {
           if (state.actionErrorMessage != null) {
@@ -166,23 +166,23 @@ class _ProductListItem extends StatelessWidget {
           ),
         );
         break;
-      case 'edit':
-        Navigator.of(context).push(
-          MaterialPageRoute(
-            builder:
-                (_) => ProductFormView(mode: FormMode.edit, product: product),
-          ),
-        );
-        break;
-      case 'activate':
-      case 'deactivate':
-        context.read<ProductViewModel>().add(
-          ToggleProductStatus(
-            productId: product.id,
-            currentStatus: product.isActive,
-          ),
-        );
-        break;
+      // case 'edit':
+      //   Navigator.of(context).push(
+      //     MaterialPageRoute(
+      //       builder:
+      //           (_) => ProductFormView(mode: FormMode.edit, product: product),
+      //     ),
+      //   );
+      //   break;
+      // case 'activate':
+      // case 'deactivate':
+      //   context.read<ProductViewModel>().add(
+      //     ToggleProductStatus(
+      //       productId: product.id,
+      //       currentStatus: product.isActive,
+      //     ),
+      //   );
+      //   break;
     }
   }
 
@@ -239,17 +239,17 @@ class _ProductListItem extends StatelessWidget {
                               value: 'view',
                               child: Text('View Details'),
                             ),
-                            const PopupMenuItem<String>(
-                              value: 'edit',
-                              child: Text('Edit'),
-                            ),
-                            PopupMenuItem<String>(
-                              value:
-                                  product.isActive ? 'deactivate' : 'activate',
-                              child: Text(
-                                product.isActive ? 'Deactivate' : 'Activate',
-                              ),
-                            ),
+                            // const PopupMenuItem<String>(
+                            //   value: 'edit',
+                            //   child: Text('Edit'),
+                            // ),
+                            // PopupMenuItem<String>(
+                            //   value:
+                            //       product.isActive ? 'deactivate' : 'activate',
+                            //   child: Text(
+                            //     product.isActive ? 'Deactivate' : 'Activate',
+                            //   ),
+                            // ),
                           ],
                     ),
               ],
