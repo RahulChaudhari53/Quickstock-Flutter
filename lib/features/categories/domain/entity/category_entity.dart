@@ -1,4 +1,3 @@
-// lib/features/categories/domain/entities/category_entity.dart
 import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart';
 

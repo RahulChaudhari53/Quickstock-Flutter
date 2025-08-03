@@ -5,6 +5,7 @@ import 'package:quickstock/features/dashboard/presentation/page_content.dart';
 import 'package:quickstock/features/dashboard/presentation/view/home/home_view.dart';
 import 'package:quickstock/features/dashboard/presentation/view_model/dashboard_layout_viewmodel/dashboard_event.dart';
 import 'package:quickstock/features/dashboard/presentation/view_model/dashboard_layout_viewmodel/dashboard_view_model.dart';
+import 'package:quickstock/features/product/presentation/view/product_view.dart';
 import 'package:quickstock/features/profile/presentation/view/profile_view.dart';
 import 'package:quickstock/features/sales/presentation/view/sales_history_view.dart';
 import 'package:quickstock/features/stock/presentation/view/stock_view.dart';
@@ -57,12 +58,12 @@ class AppDrawer extends StatelessWidget {
           ),
 
           // product selection
-          // ListTile(
-          //   leading: const Icon(Icons.inventory_outlined),
-          //   title: const Text('Products'),
-          //   selected: currentPage.title == 'Products',
-          //   onTap: () => onSelectItem(const ProductView()),
-          // ),
+          ListTile(
+            leading: const Icon(Icons.inventory_outlined),
+            title: const Text('Products'),
+            selected: currentPage.title == 'Products',
+            onTap: () => onSelectItem(const ProductView()),
+          ),
 
           // sales selection
           ListTile(

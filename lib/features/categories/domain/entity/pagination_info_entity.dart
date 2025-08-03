@@ -1,5 +1,3 @@
-// lib/features/categories/domain/entities/pagination_info_entity.dart
-
 import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart' show immutable;
 

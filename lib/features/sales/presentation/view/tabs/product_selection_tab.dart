@@ -12,7 +12,6 @@ class ProductSelectionTab extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        // Search Bar
         Padding(
           padding: const EdgeInsets.all(16.0),
           child: TextField(
@@ -27,10 +26,8 @@ class ProductSelectionTab extends StatelessWidget {
             ),
           ),
         ),
-        // Product Grid
         Expanded(
           child: BlocBuilder<CreateSaleViewModel, CreateSaleState>(
-            // rebuild only when the product list or loading status changes
             buildWhen:
                 (previous, current) =>
                     previous.status != current.status ||

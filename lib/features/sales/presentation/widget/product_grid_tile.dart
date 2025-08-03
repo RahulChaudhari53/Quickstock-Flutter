@@ -20,8 +20,7 @@ class ProductGridTile extends StatelessWidget {
     return Card(
       elevation: 1,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-      clipBehavior:
-          Clip.antiAlias, 
+      clipBehavior: Clip.antiAlias,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
@@ -44,7 +43,7 @@ class ProductGridTile extends StatelessWidget {
               ],
             ),
           ),
-          const Spacer(), 
+          const Spacer(),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 8.0),
             child: Text(

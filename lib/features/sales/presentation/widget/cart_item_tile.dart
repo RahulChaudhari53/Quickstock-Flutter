@@ -50,8 +50,6 @@ class CartItemTile extends StatelessWidget {
   }
 }
 
-// Reusable Sub-Widget for Quantity Control 
-
 class _QuantitySelector extends StatelessWidget {
   final int quantity;
   final ValueChanged<int> onChanged;

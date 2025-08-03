@@ -1,5 +1,3 @@
-// /presentation/view/verify_otp_view.dart
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pinput/pinput.dart';
@@ -22,7 +20,6 @@ class VerifyOtpView extends StatelessWidget {
     final theme = Theme.of(context);
     final textTheme = theme.textTheme;
 
-    // pinput theme
     final defaultPinTheme = PinTheme(
       width: 56,
       height: 56,

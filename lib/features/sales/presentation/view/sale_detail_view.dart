@@ -65,7 +65,6 @@ class _SaleDetailContent extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Primary Details
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -97,7 +96,6 @@ class _SaleDetailContent extends StatelessWidget {
             ],
           ),
           const Divider(height: 32),
-          // Payment Method
           Text('PAYMENT METHOD', style: theme.textTheme.bodySmall),
           const SizedBox(height: 8),
           Chip(
@@ -110,7 +108,6 @@ class _SaleDetailContent extends StatelessWidget {
             ),
           ),
           const Divider(height: 32),
-          // Items Sold
           Text(
             'ITEMS SOLD (${sale.items.length})',
             style: theme.textTheme.titleMedium,
