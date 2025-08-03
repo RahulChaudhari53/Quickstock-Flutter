@@ -26,7 +26,6 @@ QuickStock is a modern inventory management system designed to support small and
   - Android and iOS support via Flutter
   - Responsive UI design
 
----
 
 ## Future Works
 
@@ -38,7 +37,6 @@ We are continuously working to enhance Quickstock with new features and improvem
 * **Advanced analytics:** Provide deeper insights into sales trends, inventory performance, and user activity.
 * **UI Enhancement:** Ongoing improvements to the user interface for better aesthetics and usability.
 
----
 
 ## ⚙️ Tech Stack
 
@@ -58,8 +56,6 @@ Run widget and unit tests:
 ```bash
 flutter test
 ```
-
----
 
 ## Author
 Rahul Chaudhari
