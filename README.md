@@ -58,3 +58,7 @@ Run widget and unit tests:
 ```bash
 flutter test
 
+---
+
+## Author
+Rahul Chaudhari
