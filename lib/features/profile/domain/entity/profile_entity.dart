@@ -29,6 +29,30 @@ class ProfileEntity extends Equatable {
 
   String get fullName => '$firstName $lastName';
 
+  ProfileEntity copyWith({
+    String? id,
+    String? firstName,
+    String? lastName,
+    String? email,
+    String? primaryPhone,
+    String? role,
+    bool? isActive,
+    DateTime? createdAt,
+    DateTime? updatedAt,
+  }) {
+    return ProfileEntity(
+      id: id ?? this.id,
+      firstName: firstName ?? this.firstName,
+      lastName: lastName ?? this.lastName,
+      email: email ?? this.email,
+      primaryPhone: primaryPhone ?? this.primaryPhone,
+      role: role ?? this.role,
+      isActive: isActive ?? this.isActive,
+      createdAt: createdAt ?? this.createdAt,
+      updatedAt: updatedAt ?? this.updatedAt,
+    );
+  }
+
   @override
   List<Object?> get props => [
     id,
