@@ -57,6 +57,7 @@ Run widget and unit tests:
 
 ```bash
 flutter test
+```
 
 ---
 
